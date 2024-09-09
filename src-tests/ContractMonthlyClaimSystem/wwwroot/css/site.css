@@ -25,4 +25,10 @@ body {
 	background-image: url('/images/hero-background.jpg');
 	background-size: cover; /* Cover the entire div */
 	background-position: center; /* Center the image */
+
+	.btn:hover {
+		background-color: var(--bs-primary); /* Bootstrap primary color */
+		color: var(--bs-light); /* Bootstrap light color */
+		border-color: var(--bs-primary); /* Change border to primary as well */
+	}
 }
