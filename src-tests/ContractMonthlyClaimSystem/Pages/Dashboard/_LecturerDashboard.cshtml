@@ -44,44 +44,45 @@
 
 <h2 class="text-center my-2">Submitted Claims</h2>
 
-<table class="table table-striped table-hover align-middle">
-	<thead class="thead-dark">
-		<tr>
-			<th>Course</th>
-			<th>Date Submitted</th>
-			<th>Total Amount</th>
-			<th>Hours Worked</th>
-			<th>Hourly Rate</th>
-			<th>Description</th>
-			<th>Supporting Documents</th>
-			<th>Status</th>
-		</tr>
-	</thead>
-	<tbody>
-		@for (int i = 0; i < 5; i++)
-		{
+<div class="table-responsive">
+	<table class="table table-striped table-hover align-middle">
+		<thead class="thead-dark">
 			<tr>
-				<td>Course Name</td>
-				<td>Date</td>
-				<td>R500.00</td>
-				<td>40</td>
-				<td>R12.50</td>
-				<td>
-					@{
-						var description = "Example work description that is too long to fit in the table.";
-						var truncatedDescription = description.Length > 20
-							? description.Substring(0, 20) + "..."
-							: description;
-					}
-					@truncatedDescription
-				</td>
-				<td>
-					<a href="#" class="text-decoration-none">Document1.pdf</a>,
-					<a href="#" class="text-decoration-none">Document2.docx</a>
-				</td>
-				<td><span class="badge bg-warning text-dark">Pending</span></td>
+				<th>Course</th>
+				<th>Date Submitted</th>
+				<th>Total Amount</th>
+				<th>Hours Worked</th>
+				<th>Hourly Rate</th>
+				<th>Description</th>
+				<th>Supporting Documents</th>
+				<th>Status</th>
 			</tr>
-		}
-	</tbody>
-</table>
-
+		</thead>
+		<tbody>
+			@for (int i = 0; i < 5; i++)
+			{
+				<tr>
+					<td>ADEN5123</td>
+					<td>14 January 2023</td>
+					<td>R500.00</td>
+					<td>40</td>
+					<td>R125</td>
+					<td>
+						@{
+							var description = "Example work description that is too long to fit in the table.";
+							var truncatedDescription = description.Length > 20
+								? description.Substring(0, 20) + "..."
+								: description;
+						}
+						@truncatedDescription
+					</td>
+					<td>
+						<a href="#" class="text-decoration-none">Document1.pdf</a>,
+						<a href="#" class="text-decoration-none">Document2.docx</a>
+					</td>
+					<td><span class="badge bg-warning text-dark">Pending</span></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

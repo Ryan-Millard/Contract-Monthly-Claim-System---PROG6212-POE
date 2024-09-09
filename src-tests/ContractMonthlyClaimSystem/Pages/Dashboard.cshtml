@@ -7,12 +7,9 @@
 
 <h1 class="my-4 text-center">My Dashboard</h1>
 
-<p>@userRole</p>
-
 @if (userRole == "lecturer")
 {
     @await Html.PartialAsync("~/Pages/Dashboard/_LecturerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.LecturerDashboardViewModel {})
-    @await Html.PartialAsync("~/Pages/Dashboard/_ManagerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.ManagerDashboardViewModel {})
 }
 else if (userRole == "manager")
 {
