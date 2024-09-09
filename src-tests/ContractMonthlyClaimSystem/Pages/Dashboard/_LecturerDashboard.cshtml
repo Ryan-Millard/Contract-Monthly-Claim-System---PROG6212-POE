@@ -1,0 +1,87 @@
+@model ContractMonthlyClaimSystem.Models.LecturerDashboardViewModel
+@{
+}
+
+<details class="card p-1 mb-4 bg-primary bg-opacity-10">
+	<summary class="container">Submit Claim</summary>
+
+	<form method="post" class="mt-1 p-4 border rounded bg-light" enctype="multipart/form-data">
+		<div class="form-group mb-3">
+			<label for="course">Select Course</label>
+			<select class="form-control" id="course" name="SelectedCourse" required>
+				<option value="">-- Select a Course --</option>
+				@foreach (var course in Model.Courses)
+				{
+					<option value="@course.Value">@course.Text</option>
+				}
+			</select>
+		</div>
+		<div class="form-group mb-3">
+			<label for="hoursWorked">Hours Worked</label>
+			<input type="number" step="0.01" class="form-control" id="hoursWorked" name="hoursWorked" required>
+		</div>
+		<div class="form-group mb-3">
+			<label for="hourlyRate">Hourly Rate</label>
+			<input type="number" step="0.01" class="form-control" id="hourlyRate" name="hourlyRate" required>
+		</div>
+		<div class="form-group mb-3">
+			<label for="amount">Total Amount</label>
+			<input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+		</div>
+		<div class="form-group mb-3">
+			<label for="description">Work Description</label>
+			<textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+		</div>
+
+		<div class="form-group mb-3">
+			<label for="supportingDocuments">Supporting Documents (PDF, DOCX, XLSX, max 5 files, max size 10MB each)</label>
+			<input type="file" class="form-control" id="supportingDocuments" name="supportingDocuments" multiple accept=".pdf,.docx,.xlsx" />
+		</div>
+		
+		<button type="submit" class="btn btn-primary w-100">Submit Claim</button>
+	</form>
+</details>
+
+<h2 class="text-center my-2">Submitted Claims</h2>
+
+<table class="table table-striped table-hover align-middle">
+	<thead class="thead-dark">
+		<tr>
+			<th>Course</th>
+			<th>Date Submitted</th>
+			<th>Total Amount</th>
+			<th>Hours Worked</th>
+			<th>Hourly Rate</th>
+			<th>Description</th>
+			<th>Supporting Documents</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for (int i = 0; i < 5; i++)
+		{
+			<tr>
+				<td>Course Name</td>
+				<td>Date</td>
+				<td>R500.00</td>
+				<td>40</td>
+				<td>R12.50</td>
+				<td>
+					@{
+						var description = "Example work description that is too long to fit in the table.";
+						var truncatedDescription = description.Length > 20
+							? description.Substring(0, 20) + "..."
+							: description;
+					}
+					@truncatedDescription
+				</td>
+				<td>
+					<a href="#" class="text-decoration-none">Document1.pdf</a>,
+					<a href="#" class="text-decoration-none">Document2.docx</a>
+				</td>
+				<td><span class="badge bg-warning text-dark">Pending</span></td>
+			</tr>
+		}
+	</tbody>
+</table>
+

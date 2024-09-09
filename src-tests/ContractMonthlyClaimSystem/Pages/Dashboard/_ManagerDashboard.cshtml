@@ -1,0 +1,65 @@
+@page
+@model ContractMonthlyClaimSystem.Models.ManagerDashboardViewModel
+@{
+}
+
+<h1>Manage Claims</h1>
+
+<form method="get" class="d-flex flex-wrap align-items-center mb-4">
+	<div class="input-group w-100 w-md-75 mb-2 mb-md-0">
+		<input type="text" name="search" placeholder="Search claims..." class="form-control" aria-label="Search claims">
+		<button type="submit" class="btn btn-primary ms-2">Search</button>
+	</div>
+</form>
+
+<div class="table-responsive">
+	<table class="table table-striped table-hover align-middle">
+		<thead>
+			<tr>
+				<th>Lecturer</th>
+				<th>Course</th>
+				<th>Date Submitted</th>
+				<th>Total Amount</th>
+				<th>Hours Worked</th>
+				<th>Hourly Rate</th>
+				<th>Description</th>
+				<th>Supporting Documents</th>
+				<th>Status</th>
+				<th colspan="2">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (int i = 0; i < 5; i++)
+			{
+				<tr>
+					<td>Peter Johnson</td>
+					<td>ADEN5124</td>
+					<td>14 January 2023</td>
+					<td>$1500</td>
+					<td>10</td>
+					<td>$150</td>
+					<td>
+						@{
+							var description = "Example work description that is too long to fit in the table.";
+							var truncatedDescription = description.Length > 20
+								? description.Substring(0, 20) + "..."
+								: description;
+						}
+						@truncatedDescription
+					</td>
+					<td>
+						<a href="#" class="text-decoration-none">Document1.pdf</a>,
+						<a href="#" class="text-decoration-none">Document2.docx</a>
+					</td>
+						<td><span class="badge bg-warning text-dark">Pending</span></td>
+					<td>
+						<a asp-page="./ApproveClaim" asp-route-id="" class="btn btn-outline-success btn-sm">Approve</a>
+					</td>
+					<td>
+						<a asp-page="./RejectClaim" asp-route-id="" class="btn btn-outline-danger btn-sm">Reject</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
