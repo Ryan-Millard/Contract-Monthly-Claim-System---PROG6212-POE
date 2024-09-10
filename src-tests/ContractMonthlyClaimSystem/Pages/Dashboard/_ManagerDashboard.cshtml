@@ -3,7 +3,7 @@
 @{
 }
 
-<h1>Manage Claims</h1>
+<h2 class="text-center">Manage Claims</h2>
 
 <form method="get" class="d-flex flex-wrap align-items-center mb-4">
 	<div class="input-group w-100 w-md-75 mb-2 mb-md-0">
@@ -29,6 +29,21 @@
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<td>Peter Johnson</td>
+				<td>ADEN5124</td>
+				<td>14 January 2023</td>
+				<td>$1500</td>
+				<td>10</td>
+				<td>$150</td>
+				<td>Description</td>
+				<td>
+					<a href="#" class="text-decoration-none">Document1.pdf</a>,
+					<a href="#" class="text-decoration-none">Document2.docx</a>
+				</td>
+				<td><span class="badge bg-success text-dark">Approved</span></td>
+				<td colspan="2" class="text-center">N/A</td>
+			</tr>
 			@for (int i = 0; i < 5; i++)
 			{
 				<tr>
@@ -60,6 +75,21 @@
 					</td>
 				</tr>
 			}
+			<tr>
+				<td>Peter Johnson</td>
+				<td>ADEN5124</td>
+				<td>14 January 2023</td>
+				<td>$1500</td>
+				<td>10</td>
+				<td>$150</td>
+				<td>Description</td>
+				<td>
+					<a href="#" class="text-decoration-none">Document1.pdf</a>,
+					<a href="#" class="text-decoration-none">Document2.docx</a>
+				</td>
+				<td><span class="badge bg-danger text-dark">Rejected</span></td>
+				<td colspan="2" class="text-center">N/A</td>
+			</tr>
 		</tbody>
 	</table>
 </div>
