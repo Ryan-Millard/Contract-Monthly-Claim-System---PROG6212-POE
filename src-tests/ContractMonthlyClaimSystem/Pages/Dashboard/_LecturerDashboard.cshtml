@@ -1,5 +1,7 @@
 @model ContractMonthlyClaimSystem.Models.LecturerDashboardViewModel
 
+<h2 class="text-center mt-2">New Claim</h2>
+
 <form method="post" class="my-4 p-4 border rounded bg-light" enctype="multipart/form-data">
 	<div class="form-group mb-3">
 		<label>Select Course</label>
@@ -70,6 +72,21 @@
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<td>ASPN1035</td>
+				<td>23 February 2022</td>
+				<td>R500.00</td>
+				<td>40</td>
+				<td>R125</td>
+				<td>
+					Lectures from the beginning of the year.
+				</td>
+				<td>
+					<a href="#" class="text-decoration-none">Document1.pdf</a>,
+					<a href="#" class="text-decoration-none">Document2.docx</a>
+				</td>
+				<td><span class="badge bg-success text-dark">Approved</span></td>
+			</tr>
 			@for (int i = 0; i < 5; i++)
 			{
 				<tr>
@@ -94,6 +111,21 @@
 					<td><span class="badge bg-warning text-dark">Pending</span></td>
 				</tr>
 			}
+			<tr>
+				<td>ASPN1035</td>
+				<td>23 March 2024</td>
+				<td>R500.00</td>
+				<td>40</td>
+				<td>R125</td>
+				<td>
+					Lectures from the beginning of the year.
+				</td>
+				<td>
+					<a href="#" class="text-decoration-none">Document1.pdf</a>,
+					<a href="#" class="text-decoration-none">Document2.docx</a>
+				</td>
+				<td><span class="badge bg-danger text-dark">Rejected</span></td>
+			</tr>
 		</tbody>
 	</table>
 </div>
