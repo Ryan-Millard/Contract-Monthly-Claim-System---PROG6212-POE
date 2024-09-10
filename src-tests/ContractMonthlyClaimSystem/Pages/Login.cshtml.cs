@@ -17,6 +17,12 @@ namespace ContractMonthlyClaimSystem.Models
 		[EmailAddress(ErrorMessage = "Invalid email format")]
 		public string Email { get; set; } = "";
 
+		[Required(ErrorMessage = "Password is required")]
+		[DataType(DataType.Password)]
+		[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+				ErrorMessage = "Password must have at least 8 characters, one uppercase, one lowercase, one number, and one special character")]
+		public string Password { get; set; } = "";
+
 		public string successMessage = "";
 		public string errorMessage = "";
 
