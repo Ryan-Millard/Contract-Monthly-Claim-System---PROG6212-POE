@@ -8,9 +8,6 @@ namespace ContractMonthlyClaimSystem.Pages
 	[Authorize]
 	public class DashboardModel : PageModel
 	{
-		[BindProperty]
-		public LecturerDashboardViewModel? LecturerDashboard { get; set; }
-
 		public void OnGet()
 		{
 			// Initialize any data needed for the view, e.g., load courses

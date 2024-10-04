@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContractMonthlyClaimSystem.Models
 {
-	public class LecturerDashboardViewModel
+	public class SubmitClaimViewModel
 	{
 		[BindProperty]
 		[Required(ErrorMessage = "Please select a course.")]
@@ -32,14 +32,14 @@ namespace ContractMonthlyClaimSystem.Models
 
 		[BindProperty]
 		[Required(ErrorMessage = "Please upload at least one supporting document.")]
-		[FileExtensions(Extensions = "pdf,docx,xlsx", ErrorMessage = "Only PDF, DOCX, and XLSX files are allowed.")]
+		[FileExtensions(Extensions = ".pdf,.docx,.xlsx", ErrorMessage = "Only PDF, DOCX, and XLSX files are allowed.")]
 		public IFormFileCollection SupportingDocuments { get; set; } = new FormFileCollection();
 
 		public List<SelectListItem> Courses { get; set; } = new List<SelectListItem>
 		{
 			new SelectListItem { Value = "Course1", Text = "Course 1" },
-				new SelectListItem { Value = "Course2", Text = "Course 2" },
-				new SelectListItem { Value = "Course3", Text = "Course 3" }
+			new SelectListItem { Value = "Course2", Text = "Course 2" },
+			new SelectListItem { Value = "Course3", Text = "Course 3" }
 		};
 	}
 }
