@@ -2,24 +2,16 @@
 @model ContractMonthlyClaimSystem.Pages.DashboardModel
 @{
 	ViewData["Title"] = "Dashboard";
-	var userRole = "manager"; // change this according to which view needs to be rendered
+	var userRole = HttpContext.Session.GetString("UserFirstName");
 }
 
 <h1 class="my-4 text-center">My Dashboard</h1>
 
-@if (userRole == "lecturer")
-{
-    @await Html.PartialAsync("~/Pages/Dashboard/_LecturerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.LecturerDashboardViewModel {})
-}
-else if (userRole == "manager")
+@if (userRole == "manager")
 {
     @await Html.PartialAsync("~/Pages/Dashboard/_ManagerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.ManagerDashboardViewModel {})
 }
-else if (userRole == "coordinator")
-{
-	<div>coordinator</div>
-}
 else
 {
-    <p>No dashboard available for this role.</p>
+    @await Html.PartialAsync("~/Pages/Dashboard/_LecturerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.LecturerDashboardViewModel {})
 }

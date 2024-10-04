@@ -1,0 +1,15 @@
+@page
+@model ContractMonthlyClaimSystem.Models.Users.LogoutModel
+
+@if (TempData["LogoutMessage"] != null)
+{
+	<div class="alert alert-success" role="alert">
+		@TempData["LogoutMessage"]
+		</div>
+}
+else
+{
+	<div class="alert alert-success" role="alert">
+		An error occurred during the logging out process. Please try again.
+		</div>
+}

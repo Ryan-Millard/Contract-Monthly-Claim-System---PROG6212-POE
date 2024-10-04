@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ContractMonthlyClaimSystem.Models;
 
 namespace ContractMonthlyClaimSystem.Pages
 {
+	[Authorize]
 	public class DashboardModel : PageModel
 	{
 		[BindProperty]
