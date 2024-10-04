@@ -33,7 +33,7 @@ namespace ContractMonthlyClaimSystem.Models
 		[BindProperty]
 		[Required(ErrorMessage = "Please upload at least one supporting document.")]
 		[FileExtensions(Extensions = "pdf,docx,xlsx", ErrorMessage = "Only PDF, DOCX, and XLSX files are allowed.")]
-		public IFormFileCollection SupportingDocuments { get; set; } = default;
+		public IFormFileCollection SupportingDocuments { get; set; } = new FormFileCollection();
 
 		public List<SelectListItem> Courses { get; set; } = new List<SelectListItem>
 		{
