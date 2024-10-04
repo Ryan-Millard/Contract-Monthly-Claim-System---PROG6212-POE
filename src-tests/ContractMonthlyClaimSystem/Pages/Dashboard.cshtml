@@ -2,12 +2,12 @@
 @model ContractMonthlyClaimSystem.Pages.DashboardModel
 @{
 	ViewData["Title"] = "Dashboard";
-	var userRole = HttpContext.Session.GetString("UserFirstName");
+	var userRole = HttpContext.Session.GetString("UserRole");
 }
 
-<h1 class="my-4 text-center">My Dashboard</h1>
+<h1 class="my-4 text-center">@userRole Dashboard</h1>
 
-@if (userRole == "manager")
+@if (userRole == "Admin")
 {
     @await Html.PartialAsync("~/Pages/Dashboard/_ManagerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.ManagerDashboardViewModel {})
 }

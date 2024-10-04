@@ -10,20 +10,20 @@ namespace ContractMonthlyClaimSystem.Models
 
 		[Required(ErrorMessage = "First name is required")]
 		[StringLength(50)]
-		public string? FirstName { get; set; }
+		public string FirstName { get; set; } = "";
 
 		[Required(ErrorMessage = "Last name is required")]
 		[StringLength(50)]
-		public string? LastName { get; set; }
+		public string LastName { get; set; } = "";
 
 		[Required(ErrorMessage = "Email is required")]
 		[EmailAddress(ErrorMessage = "Invalid email address")]
-		public string? Email { get; set; }
+		public string Email { get; set; } = "";
 
 		[Required]
-		public Role Role { get; set; }
+		public Role Role { get; set; } = Role.Lecturer;
 
-		public string? PasswordHash { get; set; } // This property will be stored in the database
+		public string PasswordHash { get; set; } = ""; // This property will be stored in the database
 	}
 }
 

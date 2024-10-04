@@ -34,12 +34,22 @@ namespace ContractMonthlyClaimSystem.Models.Users
             _context = context;
         }
 
-        public void OnGet()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                Response.Redirect("/Dashboard");
-            }
+		public void OnGet()
+		{
+			var userSessionVariables = new []
+			{
+				HttpContext.Session.GetString("UserFirstName"),
+				HttpContext.Session.GetString("UserLastName"),
+				HttpContext.Session.GetString("UserEmail"),
+				HttpContext.Session.GetString("UserRole"),
+				HttpContext.Session.GetString("UserPasswordHash"),
+			};
+
+			foreach(var sessVar in userSessionVariables)
+				if(string.IsNullOrEmpty(sessVar))
+						return;
+
+			Response.Redirect("/Dashboard");
         }
 
         public async Task OnPostAsync()
@@ -77,6 +87,7 @@ namespace ContractMonthlyClaimSystem.Models.Users
             HttpContext.Session.SetString("UserFirstName", user.FirstName);
             HttpContext.Session.SetString("UserLastName", user.LastName);
             HttpContext.Session.SetString("UserEmail", user.Email);
+            HttpContext.Session.SetString("UserPasswordHash", user.PasswordHash);
             HttpContext.Session.SetString("UserRole", user.Role.ToString());
 
             // Clear the fields for security

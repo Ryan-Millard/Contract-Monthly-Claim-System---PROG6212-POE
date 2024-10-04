@@ -15,13 +15,14 @@ namespace ContractMonthlyClaimSystem.Pages.Users
 		public User NewUser { get; set; }
 
 		[BindProperty]
-		public string PlainTextPassword { get; set; }
+		public string PlainTextPassword { get; set; } = "";
 		[BindProperty]
-		public string ConfirmPassword { get; set; }
+		public string ConfirmPassword { get; set; } = "";
 
 		public SignUpModel(AppDbContext dbContext)
 		{
 			_dbContext = dbContext;
+			NewUser = new User();
 		}
 
 		public void OnGet()
