@@ -9,9 +9,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ContractMonthlyClaimSystem.Pages.Dashboard
+namespace ContractMonthlyClaimSystem.Pages.Dashboard.Lecturer
 {
-	[Authorize]
 	public class SubmitClaimModel : PageModel
 	{
 		private readonly AppDbContext _context;
@@ -24,10 +23,23 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 		[BindProperty]
 		public SubmitClaimViewModel ClaimViewModel { get; set; } = new SubmitClaimViewModel();
 
-		public void OnGet()
+		public IActionResult OnGet()
 		{
+            var userRole = HttpContext.Session.GetString("UserRole");
+
+            if (userRole == "Admin")
+            {
+                return RedirectToPage("/Dashboard/Admin");
+            }
+            else if (userRole != "Lecturer")
+            {
+                return RedirectToPage("/Users/Login");
+            }
+
 			// Populate courses or other necessary data
 			ClaimViewModel.Courses = GetCourses();
+
+			return Page();
 		}
 
 		public async Task<IActionResult> OnPostAsync()
@@ -106,7 +118,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 				if (file.Length > 0)
 				{
 					// Define the directory where files will be stored
-					var directoryPath = Path.Combine("wwwroot/uploads", claimId.ToString());
+					var directoryPath = Path.Combine("uploads", claimId.ToString());
 
 					// Ensure the directory exists
 					if (!Directory.Exists(directoryPath))

@@ -1,0 +1,68 @@
+@page
+@model ContractMonthlyClaimSystem.Pages.Dashboard.LecturerModel
+@{
+	ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="text-center">Lecturer Dashboard</h1>
+
+<div class="d-flex justify-content-center">
+    <a class="btn btn-primary" href="/Dashboard/Lecturer/SubmitClaim">New Claim</a>
+</div>
+
+<h2 class="text-center my-2">Submitted Claims</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="thead-dark">
+            <tr>
+                <th>Course</th>
+                <th>Date Submitted</th>
+                <th>Total Amount</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Description</th>
+                <th>Supporting Documents</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model.Claims)
+            {
+				<tr>
+					<a href="@Url.Page("/Dashboard/ClaimDetails", new { id = claim.Id })">
+						<td>@claim.Course</td>
+						<td>@claim.SubmissionDate.ToString("dd MMMM yyyy")</td>
+						<td>@claim.TotalAmount.ToString("F2")</td>
+						<td>@claim.HoursWorked.ToString("F2")</td>
+						<td>@claim.HourlyRate.ToString("F2")</td>
+						<td>
+							@{
+								var truncatedDescription = claim.Description.Length > 20
+									? claim.Description.Substring(0, 20) + "..."
+									: claim.Description;
+							}
+							@truncatedDescription
+						</td>
+						<td>
+							@foreach (var doc in claim.SupportingDocuments)
+							{
+								var fileHref = Url.Content("~/" + doc.FilePath);
+								<a href="@fileHref" class="text-decoration-none" target="_blank">
+									@doc.FileName
+									@if (doc != claim.SupportingDocuments.Last()) { <span>, </span> }
+								</a>
+							}
+						</td>
+						<td>
+							<span class="badge @(claim.Status.ToString() == "Approved" ? "bg-success text-dark" : claim.Status.ToString() == "Pending" ? "bg-warning text-dark" : "bg-danger text-dark")">
+								@claim.Status
+							</span>
+						</td>
+					</a>
+				</tr>
+            } <!-- Ensure this closing bracket is here -->
+        </tbody>
+    </table>
+</div>
+

@@ -1,17 +1,13 @@
-﻿@page 
+@page
 @model ContractMonthlyClaimSystem.Pages.DashboardModel
-@{
-	ViewData["Title"] = "Dashboard";
-	var userRole = HttpContext.Session.GetString("UserRole");
-}
 
-<h1 class="my-4 text-center">@userRole Dashboard</h1>
-
-@if (userRole == "Admin")
-{
-    @await Html.PartialAsync("~/Pages/Dashboard/_ManagerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.ManagerDashboardViewModel {})
-}
-else
-{
-    @await Html.PartialAsync("~/Pages/Dashboard/_LecturerDashboard.cshtml", new ContractMonthlyClaimSystem.Models.SubmitClaimViewModel {})
-}
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		document.getElementById("loadingMessage").innerText = "Redirecting, please wait...";
+	});
+</script>
+<div class="container">
+	<h1>Redirecting...</h1>
+	<p id="loadingMessage">You are being redirected based on your role.</p>
+	<p>If you are not redirected automatically, <a href="@Url.Page("/Account/Login")">click here</a> to log in.</p>
+</div>

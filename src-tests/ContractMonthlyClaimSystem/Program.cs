@@ -49,10 +49,11 @@ namespace ContractMonthlyClaimSystem
 			app.UseStaticFiles();
 
 			app.UseRouting();
-			app.UseMiddleware<CookieSessionMiddleware>();
 			app.UseSession();
 			app.UseAuthentication();
 			app.UseAuthorization();
+			app.UseStaticFiles();
+			app.UseMiddleware<CookieSessionMiddleware>();
 
 			app.MapRazorPages();
 

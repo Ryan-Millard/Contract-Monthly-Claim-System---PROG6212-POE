@@ -1,0 +1,33 @@
+@page
+@model ContractMonthlyClaimSystem.Pages.Dashboard.ClaimDetailsModel
+
+<h1 class="text-center">Claim Details</h1>
+
+<div class="container">
+	<h2>@Model.Claim.Course</h2>
+	<p><strong>Date Submitted:</strong> @Model.Claim.SubmissionDate.ToString("dd MMMM yyyy")</p>
+	<p><strong>Total Amount:</strong> @Model.Claim.TotalAmount.ToString("F2")</p>
+	<p><strong>Hours Worked:</strong> @Model.Claim.HoursWorked.ToString("F2")</p>
+	<p><strong>Hourly Rate:</strong> @Model.Claim.HourlyRate.ToString("F2")</p>
+	<p><strong>Description:</strong> @Model.Claim.Description</p>
+	<p><strong>Status:</strong>
+		<span class="badge @(Model.Claim.Status.ToString() == "Approved" ? "bg-success text-dark" : Model.Claim.Status.ToString() == "Pending" ? "bg-warning text-dark" : "bg-danger text-dark")">
+			@Model.Claim.Status
+		</span>
+	</p>
+
+	<h3>Supporting Documents</h3>
+	<ul>
+		@foreach (var doc in Model.Claim.SupportingDocuments)
+		{
+			var fileHref = Url.Content("~/" + doc.FilePath);
+			<li>
+				<a href="@fileHref" class="text-decoration-none" target="_blank">@doc.FileName</a>
+			</li>
+		}
+	</ul>
+
+	<div class="mt-4">
+		<a class="btn btn-secondary" href="/Dashboard/Lecturer">Back to Dashboard</a>
+	</div>
+</div>

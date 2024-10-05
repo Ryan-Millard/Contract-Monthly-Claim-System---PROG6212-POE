@@ -1,28 +1,27 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ContractMonthlyClaimSystem.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ContractMonthlyClaimSystem.Pages
 {
+	[Route("Dashboard")]
 	public class DashboardModel : PageModel
 	{
-		public void OnGet()
+		public IActionResult OnGet()
 		{
-			// Initialize any data needed for the view, e.g., load courses
-		}
+			var userRole = HttpContext.Session.GetString("UserRole");
 
-		public IActionResult OnPost()
-		{
-			if (!ModelState.IsValid)
+			if (userRole == "Lecturer")
 			{
-				// Redisplay the form with validation errors
-				return Page();
+				return RedirectToPage("/Dashboard/Lecturer");
+			}
+			else if (userRole == "Admin")
+			{
+				return RedirectToPage("/Dashboard/Admin");
 			}
 
-			// Process valid form data here (e.g., save to the database)
-			// Redirect or show a success message
-			return RedirectToPage("/Dashboard");
+			// Default action if the user has no matching role
+			return RedirectToPage("/Users/Login");
 		}
 	}
 }
