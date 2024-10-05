@@ -33,9 +33,9 @@
 				<tr>
 					<td>@claim.Course</td>
 					<td>@claim.SubmissionDate.ToString("dd MMMM yyyy")</td>
-					<td>@claim.TotalAmount.ToString("F2")</td>
-					<td>@claim.HoursWorked.ToString("F2")</td>
-					<td>@claim.HourlyRate.ToString("F2")</td>
+                    <td>@claim.TotalAmount.ToString("C")</td>
+                    <td>@claim.HoursWorked.ToString("F2")</td>
+                    <td>@claim.HourlyRate.ToString("C")</td>
 					<td>
 						@{
 							var truncatedDescription = claim.Description.Length > 20

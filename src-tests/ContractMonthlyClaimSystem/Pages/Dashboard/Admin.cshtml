@@ -9,7 +9,7 @@
 
 <form method="get" class="d-flex flex-wrap align-items-center mb-4">
     <div class="input-group w-100 w-md-75 mb-2 mb-md-0">
-        <input type="text" name="search" placeholder="Search claims..." class="form-control" aria-label="Search claims" value="@Request.Query["search"]">
+        <input type="text" name="searchTerm" placeholder="Search claims... e.g. Peter Griffin" class="form-control" aria-label="Search claims" value="@Request.Query["searchTerm"]">
         <button type="submit" class="btn btn-primary ms-2">Search</button>
     </div>
 </form>

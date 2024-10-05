@@ -23,7 +23,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
             _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(string search)
+        public async Task<IActionResult> OnGetAsync(string searchTerm)
         {
             var userRole = HttpContext.Session.GetString("UserRole");
 
@@ -40,9 +40,13 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
                 .Include(c => c.User) // Include User details
                 .Include(c => c.SupportingDocuments); // Include supporting documents if necessary
 
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(c => c.User.FirstName.Contains(search) || c.Description.Contains(search));
+			if (!string.IsNullOrWhiteSpace(searchTerm))
+			{
+				query = query.Where(c =>
+						c.User.FirstName.Contains(searchTerm) ||
+						c.User.LastName.Contains(searchTerm) ||
+						c.User.Email.Contains(searchTerm) ||
+						c.Description.Contains(searchTerm));
             }
 
             Claims = await query.ToListAsync();
