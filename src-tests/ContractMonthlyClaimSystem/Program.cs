@@ -1,4 +1,5 @@
 using ContractMonthlyClaimSystem.Models;
+using ContractMonthlyClaimSystem.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ContractMonthlyClaimSystem.Data;
@@ -48,10 +49,10 @@ namespace ContractMonthlyClaimSystem
 			app.UseStaticFiles();
 
 			app.UseRouting();
+			app.UseMiddleware<CookieSessionMiddleware>();
 			app.UseSession();
 			app.UseAuthentication();
 			app.UseAuthorization();
-
 
 			app.MapRazorPages();
 

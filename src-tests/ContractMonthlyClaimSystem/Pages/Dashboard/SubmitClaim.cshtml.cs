@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using ContractMonthlyClaimSystem.Data;
 using ContractMonthlyClaimSystem.Models;
 using ContractMonthlyClaimSystem.Models.Enums;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ContractMonthlyClaimSystem.Pages.Dashboard
 {
+	[Authorize]
 	public class SubmitClaimModel : PageModel
 	{
 		private readonly AppDbContext _context;
