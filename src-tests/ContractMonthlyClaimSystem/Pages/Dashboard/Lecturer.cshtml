@@ -24,45 +24,47 @@
                 <th>Description</th>
                 <th>Supporting Documents</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var claim in Model.Claims)
-            {
+			<tbody>
+			@foreach (var claim in Model.Claims)
+			{
 				<tr>
-					<a href="@Url.Page("/Dashboard/ClaimDetails", new { id = claim.Id })">
-						<td>@claim.Course</td>
-						<td>@claim.SubmissionDate.ToString("dd MMMM yyyy")</td>
-						<td>@claim.TotalAmount.ToString("F2")</td>
-						<td>@claim.HoursWorked.ToString("F2")</td>
-						<td>@claim.HourlyRate.ToString("F2")</td>
-						<td>
-							@{
-								var truncatedDescription = claim.Description.Length > 20
-									? claim.Description.Substring(0, 20) + "..."
-									: claim.Description;
-							}
-							@truncatedDescription
-						</td>
-						<td>
-							@foreach (var doc in claim.SupportingDocuments)
-							{
-								var fileHref = Url.Content("~/" + doc.FilePath);
-								<a href="@fileHref" class="text-decoration-none" target="_blank">
-									@doc.FileName
-									@if (doc != claim.SupportingDocuments.Last()) { <span>, </span> }
-								</a>
-							}
-						</td>
-						<td>
-							<span class="badge @(claim.Status.ToString() == "Approved" ? "bg-success text-dark" : claim.Status.ToString() == "Pending" ? "bg-warning text-dark" : "bg-danger text-dark")">
-								@claim.Status
-							</span>
-						</td>
-					</a>
+					<td>@claim.Course</td>
+					<td>@claim.SubmissionDate.ToString("dd MMMM yyyy")</td>
+					<td>@claim.TotalAmount.ToString("F2")</td>
+					<td>@claim.HoursWorked.ToString("F2")</td>
+					<td>@claim.HourlyRate.ToString("F2")</td>
+					<td>
+						@{
+							var truncatedDescription = claim.Description.Length > 20
+								? claim.Description.Substring(0, 20) + "..."
+								: claim.Description;
+						}
+						@truncatedDescription
+					</td>
+					<td>
+						@foreach (var doc in claim.SupportingDocuments)
+						{
+							var fileHref = Url.Content("~/" + doc.FilePath);
+							<a href="@fileHref" class="text-decoration-none" target="_blank">
+								@doc.FileName
+								@if (doc != claim.SupportingDocuments.Last()) { <span>, </span> }
+							</a>
+						}
+					</td>
+					<td>
+						<span class="badge @(claim.Status.ToString() == "Approved" ? "bg-success text-dark" : claim.Status.ToString() == "Pending" ? "bg-warning text-dark" : "bg-danger text-dark")">
+							@claim.Status
+						</span>
+					</td>
+					<td>
+						<a href="@Url.Page("/Dashboard/ClaimDetails", new { id = claim.Id })" class="btn btn-info btn-sm">View</a>
+					</td>
 				</tr>
-            } <!-- Ensure this closing bracket is here -->
-        </tbody>
+			}
+		</tbody>
     </table>
 </div>
 

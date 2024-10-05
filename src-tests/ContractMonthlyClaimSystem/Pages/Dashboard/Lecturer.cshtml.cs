@@ -5,7 +5,7 @@ using ContractMonthlyClaimSystem.Data;
 using ContractMonthlyClaimSystem.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore; // Ensure this is included for Include method
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractMonthlyClaimSystem.Pages.Dashboard
 {
