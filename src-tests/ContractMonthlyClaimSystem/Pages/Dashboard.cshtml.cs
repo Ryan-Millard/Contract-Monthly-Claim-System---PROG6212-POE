@@ -5,7 +5,6 @@ using ContractMonthlyClaimSystem.Models;
 
 namespace ContractMonthlyClaimSystem.Pages
 {
-	[Authorize]
 	public class DashboardModel : PageModel
 	{
 		public void OnGet()

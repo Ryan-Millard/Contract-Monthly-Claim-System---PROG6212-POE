@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContractMonthlyClaimSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241004194815_MonthlyClaim")]
-    partial class MonthlyClaim
+    [Migration("20241005020815_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace ContractMonthlyClaimSystem.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("ContractMonthlyClaimSystem.Models.MonthlyClaim", b =>
+            modelBuilder.Entity("ContractMonthlyClaimSystem.Models.SupportingDocument", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,30 +33,26 @@ namespace ContractMonthlyClaimSystem.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<int>("ClaimId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
-                    b.Property<decimal>("HourlyRate")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("HoursWorked")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SubmissionDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("UserId")
+                    b.Property<int>("FileSize")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ClaimId");
 
-                    b.ToTable("Claims");
+                    b.ToTable("SupportingDocuments");
                 });
 
             modelBuilder.Entity("ContractMonthlyClaimSystem.Models.User", b =>
@@ -93,7 +89,55 @@ namespace ContractMonthlyClaimSystem.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("ContractMonthlyClaimSystem.Models.MonthlyClaim", b =>
+            modelBuilder.Entity("MonthlyClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Course")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("HoursWorked")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Claims");
+                });
+
+            modelBuilder.Entity("ContractMonthlyClaimSystem.Models.SupportingDocument", b =>
+                {
+                    b.HasOne("MonthlyClaim", "MonthlyClaim")
+                        .WithMany("SupportingDocuments")
+                        .HasForeignKey("ClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MonthlyClaim");
+                });
+
+            modelBuilder.Entity("MonthlyClaim", b =>
                 {
                     b.HasOne("ContractMonthlyClaimSystem.Models.User", "User")
                         .WithMany()
@@ -102,6 +146,11 @@ namespace ContractMonthlyClaimSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MonthlyClaim", b =>
+                {
+                    b.Navigation("SupportingDocuments");
                 });
 #pragma warning restore 612, 618
         }

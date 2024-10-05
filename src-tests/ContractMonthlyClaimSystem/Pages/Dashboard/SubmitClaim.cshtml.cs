@@ -25,7 +25,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 		public void OnGet()
 		{
 			// Populate courses or other necessary data
-			ClaimViewModel.Courses = GetCourses(); // Assuming you have a method to fetch courses
+			ClaimViewModel.Courses = GetCourses();
 		}
 
 		public async Task<IActionResult> OnPostAsync()
@@ -33,31 +33,46 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			if (!ModelState.IsValid)
 			{
 				// Repopulate the courses if model validation fails
-				ClaimViewModel.Courses = GetCourses();
+				ClaimViewModel.Courses = new List<SelectListItem>
+				{
+					new SelectListItem { Value = "Course1", Text = "Course 1" },
+					new SelectListItem { Value = "Course2", Text = "Course 2" },
+					new SelectListItem { Value = "Course3", Text = "Course 3" }
+				};
 				return Page();
 			}
 
-			// Create the MonthlyClaim object
+			var currentUser = _context.User.Find(GetUserId());
+
+			// Create the MonthlyClaim object using the form data
 			var claim = new MonthlyClaim
 			{
-				UserId = GetUserId(), // Replace with the actual logic to get the UserId
-				HoursWorked = ClaimViewModel.HoursWorked,
-				HourlyRate = ClaimViewModel.HourlyRate,
-				Description = ClaimViewModel.Description,
-				SubmissionDate = DateTime.Now,
-				Status = Status.Pending
+				UserId = currentUser.Id,                     // Assuming you're getting the current user's ID
+				Course = (Course)Enum.Parse(typeof(Course), ClaimViewModel.SelectedCourse),    // Selected course from the form
+				HoursWorked = ClaimViewModel.HoursWorked,  // Hours worked from the form
+				HourlyRate = ClaimViewModel.HourlyRate,    // Hourly rate from the form
+				Description = ClaimViewModel.Description,  // Work description from the form
+				SubmissionDate = DateTime.Now,             // The date the claim is submitted
+				Status = Status.Pending                    // Default status as Pending
 			};
 
 			// Save the claim to the database
 			_context.Claims.Add(claim);
-			await _context.SaveChangesAsync();
 
-			// Handle file uploads if any
-			await UploadSupportingDocuments(claim.Id, ClaimViewModel.SupportingDocuments); // Create this method to handle uploads
+			// Handle file uploads if any files are submitted
+			if (ClaimViewModel.SupportingDocuments != null && ClaimViewModel.SupportingDocuments.Count > 0)
+			{
+				await _context.SaveChangesAsync();
+				await UploadSupportingDocuments(claim.Id, ClaimViewModel.SupportingDocuments);
+			}
 
-			// Redirect or return a confirmation view
-			return RedirectToPage("Success"); // Change to your success page
+			TempData["ModalPopUpHeading"] = "Successfully Uploaded";
+			TempData["ModalPopUpMessage"] = "Your claim has been successfully uploaded and is pending approval by an admin.";
+
+			// Redirect to success or confirmation page
+			return RedirectToPage("/Dashboard");
 		}
+
 
 		private List<SelectListItem> GetCourses()
 		{
@@ -65,42 +80,62 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			return new List<SelectListItem>
 			{
 				new SelectListItem { Value = "Course1", Text = "Course 1" },
-				new SelectListItem { Value = "Course2", Text = "Course 2" },
-				new SelectListItem { Value = "Course3", Text = "Course 3" }
+					new SelectListItem { Value = "Course2", Text = "Course 2" },
+					new SelectListItem { Value = "Course3", Text = "Course 3" }
 			};
 		}
 
 		private int GetUserId()
 		{
-			// Implement logic to get the current user's ID
-			// Placeholder for demonstration; replace with actual user ID retrieval logic
-			return 1; 
+			string userIdString = HttpContext.Session.GetString("UserId");
+			int userId = 1;
+
+			if (!string.IsNullOrEmpty(userIdString))
+				int.TryParse(userIdString, out userId);
+
+			return userId;
 		}
 
 		private async Task UploadSupportingDocuments(int claimId, IFormFileCollection files)
 		{
-			// Implement logic to save the files to the server or database
+			// Loop through each uploaded file
 			foreach (var file in files)
 			{
 				if (file.Length > 0)
 				{
-					// Define the path where files will be saved (adjust as necessary)
+					// Define the directory where files will be stored
 					var directoryPath = Path.Combine("wwwroot/uploads", claimId.ToString());
-					var filePath = Path.Combine(directoryPath, file.FileName);
 
-					// Create the directory if it doesn't exist
+					// Ensure the directory exists
 					if (!Directory.Exists(directoryPath))
 					{
 						Directory.CreateDirectory(directoryPath);
 					}
 
-					// Save the file
+					// Define the full file path
+					var filePath = Path.Combine(directoryPath, file.FileName);
+
+					// Save the file to the server
 					using (var stream = new FileStream(filePath, FileMode.Create))
 					{
 						await file.CopyToAsync(stream);
 					}
+
+					// Save the file details to the database
+					var supportingDocument = new SupportingDocument
+					{
+						ClaimId = claimId,
+						FilePath = filePath,
+						FileSize = (int)file.Length, // File size in bytes
+						FileName = file.FileName     // Name of the file
+					};
+
+					_context.SupportingDocuments.Add(supportingDocument);  // Add to database
 				}
 			}
+
+			// Commit the changes to the database
+			await _context.SaveChangesAsync();
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace ContractMonthlyClaimSystem
 			{
 				options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
 				options.Cookie.HttpOnly = true; // Set cookie properties
-				options.Cookie.IsEssential = true; // Make the cookie essential
+				options.Cookie.IsEssential = false; // Make the cookie essential
 			});
 
 			// Configure authentication

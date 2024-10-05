@@ -7,6 +7,7 @@ namespace ContractMonthlyClaimSystem.Models
 	// User table in DB
 	public class User
 	{
+		[Key]
 		public int Id { get; set; }
 
 		[Required(ErrorMessage = "First name is required")]

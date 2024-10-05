@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using ContractMonthlyClaimSystem.Validation;
 
 namespace ContractMonthlyClaimSystem.Models
 {
@@ -20,10 +21,7 @@ namespace ContractMonthlyClaimSystem.Models
 		[Range(0.01, double.MaxValue, ErrorMessage = "Please enter a valid hourly rate.")]
 		public decimal HourlyRate { get; set; } = 0;
 
-		[BindProperty]
-		[Required(ErrorMessage = "Total amount is required.")]
-		[Range(0.01, double.MaxValue, ErrorMessage = "Please enter a valid total amount.")]
-		public decimal TotalAmount { get; set; } = 0;
+		public decimal TotalAmount => HoursWorked * HourlyRate;
 
 		[BindProperty]
 		[Required(ErrorMessage = "Please provide a description.")]
@@ -31,9 +29,11 @@ namespace ContractMonthlyClaimSystem.Models
 		public string Description { get; set; } = "";
 
 		[BindProperty]
-		[Required(ErrorMessage = "Please upload at least one supporting document.")]
-		[FileExtensions(Extensions = ".pdf,.docx,.xlsx", ErrorMessage = "Only PDF, DOCX, and XLSX files are allowed.")]
-		public IFormFileCollection SupportingDocuments { get; set; } = new FormFileCollection();
+		[Required(ErrorMessage = "Please upload supporting documents.")]
+		[DataType(DataType.Upload)]
+		[MaxFileSize(10 * 1024 * 1024, ErrorMessage = "File size should not exceed 10 MB.")]
+		[AllowedExtensions(new string[] { ".pdf", ".docx", ".xlsx" })] // Custom validation attribute for allowed extensions
+		public IFormFileCollection SupportingDocuments { get; set; }
 
 		public List<SelectListItem> Courses { get; set; } = new List<SelectListItem>
 		{

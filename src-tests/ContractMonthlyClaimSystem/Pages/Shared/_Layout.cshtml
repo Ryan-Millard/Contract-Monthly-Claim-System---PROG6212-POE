@@ -41,16 +41,20 @@
 									<a class="nav-link text-dark">Hello, @Context.Session.GetString("UserFirstName") @Context.Session.GetString("UserLastName")!</a>
 								</li>
 								<li class="nav-item mx-1">
-									<a class="btn btn-outline-dark" asp-area="" asp-page="/Users/Logout">Logout</a>
+									<form method="post" asp-page-handler="Logout" asp-page="/Users/Logout" class="d-inline">
+										<button type="submit" class="btn btn-danger">
+											Logout
+										</button>
+									</form>
 								</li>
 							}
 							else
 							{
 								<li class="nav-item mx-1">
-									<a class="btn btn-outline-dark" asp-area="" asp-page="/Users/Login">Login</a>
+									<a class="btn btn-dark" asp-area="" asp-page="/Users/Login">Login</a>
 								</li>
 								<li class="nav-item mx-1">
-									<a class="btn btn-dark" asp-area="" asp-page="/Users/SignUp">Sign Up</a>
+									<a class="btn btn-outline-dark" asp-area="" asp-page="/Users/SignUp">Sign Up</a>
 								</li>
 							}
 						</ul>

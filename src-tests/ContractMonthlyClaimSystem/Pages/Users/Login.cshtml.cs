@@ -34,30 +34,31 @@ namespace ContractMonthlyClaimSystem.Models.Users
             _context = context;
         }
 
-		public void OnGet()
-		{
-			var userSessionVariables = new []
-			{
-				HttpContext.Session.GetString("UserFirstName"),
-				HttpContext.Session.GetString("UserLastName"),
-				HttpContext.Session.GetString("UserEmail"),
-				HttpContext.Session.GetString("UserRole"),
-				HttpContext.Session.GetString("UserPasswordHash"),
-			};
+        public void OnGet()
+        {
+            var userSessionVariables = new[]
+            {
+                HttpContext.Session.GetString("UserId"),
+                HttpContext.Session.GetString("UserFirstName"),
+                HttpContext.Session.GetString("UserLastName"),
+                HttpContext.Session.GetString("UserEmail"),
+                HttpContext.Session.GetString("UserRole"),
+                HttpContext.Session.GetString("UserPasswordHash"),
+            };
 
-			foreach(var sessVar in userSessionVariables)
-				if(string.IsNullOrEmpty(sessVar))
-						return;
+            foreach (var sessVar in userSessionVariables)
+                if (string.IsNullOrEmpty(sessVar))
+                    return;
 
-			Response.Redirect("/Dashboard");
+            Response.Redirect("/Dashboard");
         }
 
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 errorMessage = "Login failed. Please check your input.";
-                return;
+                return Page();
             }
 
             // Validate the user's credentials
@@ -65,25 +66,14 @@ namespace ContractMonthlyClaimSystem.Models.Users
             if (user == null || !VerifyPassword(user.PasswordHash, Password))
             {
                 errorMessage = "Invalid email or password.";
-                return;
+                return Page();
             }
 
-            // Create claims and sign in
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString()) // Ensure Role is string-compatible
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-			TempData["ModalPopUpHeading"] = "Login Notification";
-			TempData["ModalPopUpMessage"] = "You have been logged in successfully.";
+            TempData["ModalPopUpHeading"] = "Login Notification";
+            TempData["ModalPopUpMessage"] = "You have been logged in successfully.";
 
             // Set session variables
+            HttpContext.Session.SetString("UserId", user.Id.ToString());
             HttpContext.Session.SetString("UserFirstName", user.FirstName);
             HttpContext.Session.SetString("UserLastName", user.LastName);
             HttpContext.Session.SetString("UserEmail", user.Email);
@@ -99,11 +89,11 @@ namespace ContractMonthlyClaimSystem.Models.Users
             var returnUrl = HttpContext.Request.Query["ReturnUrl"].ToString();
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                Response.Redirect(returnUrl); // Redirect to the originally requested page
+                return Redirect(returnUrl); // Redirect to the originally requested page
             }
             else
             {
-                Response.Redirect("/Dashboard"); // Fallback to the dashboard
+                return RedirectToPage("/Dashboard"); // Fallback to the dashboard
             }
         }
 
