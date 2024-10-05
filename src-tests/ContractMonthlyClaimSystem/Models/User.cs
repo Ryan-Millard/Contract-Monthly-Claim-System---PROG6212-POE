@@ -26,6 +26,9 @@ namespace ContractMonthlyClaimSystem.Models
 		public Role Role { get; set; } = Role.Lecturer;
 
 		public string PasswordHash { get; set; } = ""; // This property will be stored in the database
+
+		[NotMapped]
+		public string FullName => $"{FirstName} {LastName}";
 	}
 }
 

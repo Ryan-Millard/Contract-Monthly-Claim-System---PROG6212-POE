@@ -6,9 +6,10 @@
 <div class="container">
     <div class="card mb-4">
         <div class="card-header">
-            <h2 class="mb-0">@Model.Claim.Course</h2>
+            <h2 class="mb-0">@Model.LecturerFullName</h2>
         </div>
         <div class="card-body">
+            <p><strong>Course:</strong> @Model.Claim.Course</p>
             <p><strong>Date Submitted:</strong> @Model.Claim.SubmissionDate.ToString("dd MMMM yyyy")</p>
             <p><strong>Total Amount:</strong> R @Model.Claim.TotalAmount.ToString("F2")</p>
             <p><strong>Hours Worked:</strong> @Model.Claim.HoursWorked.ToString("F2")</p>
@@ -33,24 +34,38 @@
         }
     </ul>
 
-    <div class="text-center">
-        <a class="btn btn-secondary" href="/Dashboard/Lecturer">Back to Dashboard</a>
+	@if(HttpContext.Session.GetString("UserRole") == "Admin")
+	{
+		<form method="post" asp-page-handler="UpdateStatus">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<div class="form-group mb-0">
+						<label for="status">Update Status:</label>
+						<select id="status" name="UpdatedStatus" class="form-control">
+							@foreach (var status in Enum.GetValues(typeof(ContractMonthlyClaimSystem.Models.Enums.Status)))
+							{
+								if (Model.Claim.Status == (ContractMonthlyClaimSystem.Models.Enums.Status)status)
+								{
+									<option value="@status" selected="selected">@status</option>
+								}
+								else
+								{
+									<option value="@status">@status</option>
+								}
+							}
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4 mt-auto">
+
+					<button type="submit" class="btn btn-primary">Update Status</button>
+				</div>
+			</div>
+		</form>
+	}
+
+    <div class="text-center mt-4">
+        <a class="btn btn-secondary" href="/Dashboard">Back to Dashboard</a>
     </div>
 </div>
-
-<!-- Optional: Add custom styles for better visuals -->
-<style>
-    .badge {
-        font-size: 1rem; /* Adjust badge font size */
-    }
-    .card {
-        border: 1px solid #e0e0e0; /* Add border to card */
-    }
-    .list-group-item {
-        transition: background-color 0.3s; /* Smooth hover effect */
-    }
-    .list-group-item:hover {
-        background-color: #f8f9fa; /* Lighten on hover */
-    }
-</style>
 
