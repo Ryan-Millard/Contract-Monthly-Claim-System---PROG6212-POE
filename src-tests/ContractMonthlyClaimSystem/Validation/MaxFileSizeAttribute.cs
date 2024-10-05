@@ -13,7 +13,7 @@ namespace ContractMonthlyClaimSystem.Validation
 			_maxFileSize = maxFileSize;
 		}
 
-		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+		protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
 		{
 			if (value is IFormFileCollection files)
 			{
