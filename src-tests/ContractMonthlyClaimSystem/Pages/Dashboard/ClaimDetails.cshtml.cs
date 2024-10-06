@@ -24,24 +24,23 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
             _context = context;
         }
 
-        public IActionResult OnGet(int id)
-        {
-            // Fetch the claim by ID
-            Claim = _context.Claims
-                .Include(c => c.SupportingDocuments) // Include supporting documents if needed
-                .FirstOrDefault(c => c.Id == id);
+		public IActionResult OnGet(int id)
+		{
+			// Fetch the claim by ID
+			Claim = _context.Claims
+				.Include(c => c.SupportingDocuments) // Include supporting documents if needed
+				.FirstOrDefault(c => c.Id == id);
 
-			LecturerFullName = _context.User
-				.FirstOrDefault(u => u.Id == Claim.UserId)
-				.FullName;
+			if (Claim == null)
+				return NotFound(); // Return a 404 if the claim is not found
 
-            if (Claim == null)
-            {
-                return NotFound(); // Return a 404 if the claim is not found
-            }
+			// Fetch the lecturer's full name if Claim.UserId exists
+			var user = _context.User.FirstOrDefault(u => u.Id == Claim.UserId);
+			LecturerFullName = user?.FullName ?? "Lecturer Not Found"; // Provide a default if user is null
 
-            return Page();
-        }
+			return Page();
+		}
+
 
         public IActionResult OnPostUpdateStatus(int id)
         {
@@ -68,7 +67,11 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			}
             _context.SaveChanges(); // Save changes to the database
 
-            return RedirectToPage(); // Redirect to the same page after update
+			TempData["ModalPopUpHeading"] = "Claim status update.";
+			TempData["ModalPopUpMessage"] = "The claim's status has been successfully updated.";
+			TempData["ModalPopUpUrlRedirect"] = "/Dashboard";
+			TempData["ModalPopUpUrlBtnText"] = "Back to Dashboard";
+            return Page();
         }
     }
 }

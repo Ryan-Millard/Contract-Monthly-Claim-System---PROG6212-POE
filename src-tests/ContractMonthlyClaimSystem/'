@@ -6,7 +6,7 @@
 
 <h1 class="text-center mb-4">Claim Details</h1>
 
-<a class="mb-4 ms-3 btn btn-outline-secondary" href="/Dashboard">Back</a>
+<a class="mb-4 container btn btn-outline-secondary" href="/Dashboard">Back</a>
 
 <div class="container">
     <div class="card mb-4">
