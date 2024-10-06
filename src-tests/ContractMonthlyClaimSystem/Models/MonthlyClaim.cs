@@ -13,7 +13,7 @@ public class MonthlyClaim
     public int UserId { get; set; }
 
     [ForeignKey("UserId")]
-    public virtual User User { get; set; } // Navigation property
+    public virtual User User { get; set; } = null!;
 
     [Required]
     public Status Status { get; set; } = Status.Pending;
@@ -32,11 +32,11 @@ public class MonthlyClaim
     [NotMapped]
     public decimal TotalAmount => HoursWorked * HourlyRate;
 
-    [MaxLength(500)]
-    public string? Description { get; set; }
+    [MaxLength(500, ErrorMessage = "Description must be less than 500 characters.")]
+    public string Description { get; set; } = null!;
 
     [Required]
-    public Course Course { get; set; }
+    public Course Course { get; set; } = Course.Course1;	// Temp default value
 
     public virtual ICollection<SupportingDocument> SupportingDocuments { get; set; } = new List<SupportingDocument>();
 }

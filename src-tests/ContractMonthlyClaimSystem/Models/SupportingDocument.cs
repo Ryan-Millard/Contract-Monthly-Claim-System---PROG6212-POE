@@ -12,14 +12,13 @@ namespace ContractMonthlyClaimSystem.Models
 		public int ClaimId { get; set; }
 
 		[ForeignKey("ClaimId")]
-		public virtual MonthlyClaim MonthlyClaim { get; set; }
+		public virtual MonthlyClaim MonthlyClaim { get; set; } = null!;
 
 		[Required]
-		public string FileName { get; set; }
+		public string FileName { get; set; } = null!;
 
 		[Required]
-		[MaxLength(500)]
-		public string FilePath { get; set; }
+		public string FilePath { get; set; } = null!;
 
 		[Required]
 		[Range(1, 10 * 1024 * 1024, ErrorMessage = "File size must be between 1 byte and 10 MB.")]
