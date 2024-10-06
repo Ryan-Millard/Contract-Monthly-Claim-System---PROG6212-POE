@@ -18,9 +18,9 @@
             <tr>
                 <th>Course</th>
                 <th>Date Submitted</th>
-                <th>Total Amount</th>
                 <th>Hours Worked</th>
-                <th>Hourly Rate</th>
+                <th>Hourly Rate (R)</th>
+                <th>Total (R)</th>
                 <th>Description</th>
                 <th>Supporting Documents</th>
                 <th>Status</th>
@@ -33,9 +33,9 @@
 				<tr>
 					<td>@claim.Course</td>
 					<td>@claim.SubmissionDate.ToString("dd MMMM yyyy")</td>
-                    <td>@claim.TotalAmount.ToString("C")</td>
                     <td>@claim.HoursWorked.ToString("F2")</td>
-                    <td>@claim.HourlyRate.ToString("C")</td>
+                    <td>@claim.HourlyRate.ToString("F2")</td>
+                    <td>@claim.TotalAmount.ToString("F2")</td>
 					<td>
 						@{
 							var truncatedDescription = claim.Description.Length > 20
@@ -47,10 +47,13 @@
 					<td>
 						@foreach (var doc in claim.SupportingDocuments)
 						{
+							var truncatedFileName = doc.FileName.Length > 20
+								? doc.FileName.Substring(0, 20) + "..."
+								: doc.FileName;
 							var fileHref = Url.Content("~/" + doc.FilePath);
 							<a href="@fileHref" class="text-decoration-none" target="_blank">
 								@doc.FileName
-								@if (doc != claim.SupportingDocuments.Last()) { <span>, </span> }
+								@if (doc != claim.SupportingDocuments.Last()) { <span>, </span><br /> }
 							</a>
 						}
 					</td>

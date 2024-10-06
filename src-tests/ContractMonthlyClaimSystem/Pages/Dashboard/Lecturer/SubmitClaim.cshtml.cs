@@ -118,7 +118,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard.Lecturer
 				if (file.Length > 0)
 				{
 					// Define the directory where files will be stored
-					var directoryPath = Path.Combine("uploads", claimId.ToString());
+					var directoryPath = Path.Combine("wwwroot/uploads", claimId.ToString());
 
 					// Ensure the directory exists
 					if (!Directory.Exists(directoryPath))
