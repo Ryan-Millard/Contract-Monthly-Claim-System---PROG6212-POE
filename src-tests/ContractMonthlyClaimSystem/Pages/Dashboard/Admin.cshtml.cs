@@ -42,12 +42,16 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 
 			if (!string.IsNullOrWhiteSpace(searchTerm))
 			{
+				Status? status = Enum.TryParse(searchTerm, true, out Status parsedStatus) ? parsedStatus : (Status?)null;
+
 				query = query.Where(c =>
-						c.User.FirstName.Contains(searchTerm) ||
-						c.User.LastName.Contains(searchTerm) ||
-						c.User.Email.Contains(searchTerm) ||
-						c.Description.Contains(searchTerm));
-            }
+					c.User.FirstName.Contains(searchTerm) ||
+					c.User.LastName.Contains(searchTerm) ||
+					c.User.Email.Contains(searchTerm) ||
+					c.Description.Contains(searchTerm) ||
+					(status.HasValue && c.Status == status.Value)
+				);
+			}
 
             Claims = await query.ToListAsync();
             return Page();
