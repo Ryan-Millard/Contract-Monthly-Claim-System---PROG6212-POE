@@ -30,13 +30,17 @@
 
     <h3>Supporting Documents</h3>
     <ol class="list-group mb-4">
-        @foreach (var doc in Model.Claim.SupportingDocuments)
-        {
-            var fileHref = Url.Content("~/" + doc.FilePath);
-            <li class="list-group-item">
-                <a href="@fileHref" class="text-decoration-none" target="_blank">@doc.FileName</a>
-            </li>
-        }
+		@foreach (var doc in Model.Claim.SupportingDocuments)
+		{
+			var truncatedFileName = doc.FileName.Length > 50
+				? doc.FileName.Substring(0, 50) + "..."
+				: doc.FileName;
+			var fileHref = Url.Content("~/" + doc.FilePath);
+			<a href="@fileHref" class="text-decoration-none" target="_blank">
+				@doc.FileName
+				@if (doc != Model.Claim.SupportingDocuments.Last()) { <span>, </span><br /> }
+			</a>
+		}
     </ul>
 
 	@if(HttpContext.Session.GetString("UserRole") == "Admin")
