@@ -38,7 +38,7 @@ namespace ContractMonthlyClaimSystem.Tests
 			var document = new SupportingDocument
 			{
 				ClaimId = 1,
-				FileName = null,
+				// FileName was set to null when defined in class
 				FilePath = "/path/to/test.pdf",
 				FileSize = 500
 			};
@@ -54,7 +54,7 @@ namespace ContractMonthlyClaimSystem.Tests
 			{
 				ClaimId = 1,
 				FileName = "test.pdf",
-				FilePath = null,
+				// FilePath was set to null when defined in class
 				FileSize = 500
 			};
 
