@@ -51,9 +51,13 @@
                     <td>
                         @foreach (var doc in claim.SupportingDocuments)
                         {
-                            var fileHref = Url.Content("~/" + doc.FilePath);
+							var truncatedFileName = doc.FileName.Length > 20
+								? doc.FileName.Substring(0, 20) + "..."
+								: doc.FileName;
+							var filePath = doc.FilePath.Replace("wwwroot/", "");
+                            var fileHref = Url.Content("~/" + filePath);
                             <a href="@fileHref" class="text-decoration-none" target="_blank">
-                                @doc.FileName
+                                @truncatedFileName
                                 @if (doc != claim.SupportingDocuments.Last()) { <span>, </span> }
                             </a>
                         }
