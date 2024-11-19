@@ -25,6 +25,13 @@
                     @Model.Claim.Status
                 </span>
             </p>
+			@if(!String.IsNullOrEmpty(Model.Claim.RejectionMessage))
+			{
+				<p>
+					<strong>Reason for Rejection: </strong>
+					@Model.Claim.RejectionMessage
+					</p>
+			}
         </div>
     </div>
 
@@ -56,15 +63,21 @@
 								if (Model.Claim.Status == (ContractMonthlyClaimSystem.Models.Enums.Status)status)
 								{
 									<option value="@status" selected="selected">@status</option>
+									continue;
 								}
-								else
-								{
-									<option value="@status">@status</option>
-								}
+								<option value="@status">@status</option>
 							}
 						</select>
 					</div>
 				</div>
+
+				<div class="col-md-8 mt-3" id="rejectionReasonDiv" style="display:none;">
+					<div class="form-group">
+						<label for="rejectionReason">Reason for Rejection:</label>
+						<textarea name="RejectionMessage" id="rejectionReason" class="form-control" rows="4"></textarea>
+					</div>
+				</div>
+
 				<div class="col-md-4 mt-auto">
 
 					<button type="submit" class="btn btn-primary">Update Status</button>
@@ -74,3 +87,29 @@
 	}
 </div>
 
+<script>
+    document.getElementById('status').addEventListener('change', function() {
+        const selectedStatus = this.value;
+        const rejectionReasonDiv = document.getElementById("rejectionReasonDiv");
+        const rejectionReasonField = document.getElementById("rejectionReason");
+
+        if (selectedStatus === 'Rejected') {
+            rejectionReasonDiv.style.display = "block";
+            rejectionReasonField.setAttribute("required", "required");  // Make the rejection reason required
+        } else {
+            rejectionReasonDiv.style.display = "none";
+            rejectionReasonField.removeAttribute("required");  // Remove the required attribute if not "Rejected"
+        }
+    });
+
+    // Form validation on submit
+    document.querySelector("form").addEventListener("submit", function(event) {
+        const statusSelect = document.getElementById('status');
+        const rejectionReason = document.getElementById("rejectionReason");
+
+        if (statusSelect.value === 'Rejected' && !rejectionReason.value.trim()) {
+            event.preventDefault();  // Prevent form submission
+            alert("Please provide a reason for rejection.");  // Display an alert or show an error message
+        }
+    });
+</script>

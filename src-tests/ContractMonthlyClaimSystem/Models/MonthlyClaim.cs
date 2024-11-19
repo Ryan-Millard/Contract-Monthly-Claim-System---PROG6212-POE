@@ -13,6 +13,8 @@ public class MonthlyClaim
     public int UserId { get; set; }
 
     [ForeignKey("UserId")]
+	//	Initially null
+	//	Assigned value before use at runtime
     public virtual User User { get; set; } = null!;
 
     [Required]
@@ -39,4 +41,7 @@ public class MonthlyClaim
     public Course Course { get; set; } = Course.Course1;	// Temp default value
 
     public virtual ICollection<SupportingDocument> SupportingDocuments { get; set; } = new List<SupportingDocument>();
+
+	[MaxLength(1000, ErrorMessage = "Rejection message must be less than 1000 characters.")]
+    public string? RejectionMessage { get; set; }
 }

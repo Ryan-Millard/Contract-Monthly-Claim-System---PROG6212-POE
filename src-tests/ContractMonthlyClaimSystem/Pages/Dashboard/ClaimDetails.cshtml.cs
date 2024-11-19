@@ -16,7 +16,10 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 		public string LecturerFullName { get; set; }
 
         [BindProperty]
-        public string UpdatedStatus { get; set; } // Bind the selected status from the form
+        public string UpdatedStatus { get; set; }
+
+        [BindProperty]
+        public string RejectionMessage { get; set; }
 
         // Constructor to inject the AppDbContext
         public ClaimDetailsModel(AppDbContext context)
@@ -57,6 +60,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			if (Enum.TryParse(UpdatedStatus, out ContractMonthlyClaimSystem.Models.Enums.Status parsedStatus))
 			{
 				Claim.Status = parsedStatus;
+				Claim.RejectionMessage = RejectionMessage;
 				_context.SaveChanges(); // Save changes to the database
 			}
 			else
@@ -66,6 +70,11 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 				return Page();
 			}
             _context.SaveChanges(); // Save changes to the database
+
+			// Fetch the lecturer's full name after status update
+			var user = _context.User.FirstOrDefault(u => u.Id == Claim.UserId);
+			LecturerFullName = user?.FullName ?? "Lecturer Not Found"; // Provide a default if user is null
+
 
 			TempData["ModalPopUpHeading"] = "Claim status update.";
 			TempData["ModalPopUpMessage"] = "The claim's status has been successfully updated.";
