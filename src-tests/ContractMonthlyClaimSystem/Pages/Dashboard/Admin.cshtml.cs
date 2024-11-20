@@ -31,6 +31,10 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
             {
                 return RedirectToPage("/Dashboard/Lecturer");
             }
+			else if (userRole == "HR")
+            {
+                return RedirectToPage("/Dashboard/HR");
+            }
             else if (userRole != "Admin")
             {
                 return RedirectToPage("/Users/Login");

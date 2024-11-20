@@ -39,6 +39,59 @@
     </tbody>
 </table>
 
+<!-- Generate Report button -->
+<div class="text-center">
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reportFormatModal">
+		Download Payment Report
+	</button>
+</div>
+
+<!-- Report Format Selection Modal -->
+<div class="modal fade" id="reportFormatModal" tabindex="-1" role="dialog" aria-labelledby="reportFormatModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="GenerateReport">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportFormatModalLabel">Select Report Format</h5>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reportFormat">Report Format</label>
+                        <select class="form-control" name="format" id="reportFormat">
+                            <option value="PDF">PDF</option>
+                            <option value="Excel">Excel</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#reportFormatModal').on('show.bs.modal', function (e) {
+                $(this).find('form')[0].reset();
+            });
+
+            // Add loading indicator
+            $('form[asp-page-handler="GenerateReport"]').on('submit', function() {
+                $('#generateReportBtn').prop('disabled', true);
+                $('#generateReportBtn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...');
+            });
+        });
+    </script>
+}
+<br>
+
 <!-- Lecturer Data Management -->
 <h2 class="text-center">Manage Lecturer Data</h2>
 <table class="table">
@@ -114,58 +167,6 @@
         </div>
     </div>
 </div>
-
-<!-- Generate Report button -->
-<div class="text-center">
-	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reportFormatModal">
-		Download Payment Report
-	</button>
-</div>
-
-<!-- Report Format Selection Modal -->
-<div class="modal fade" id="reportFormatModal" tabindex="-1" role="dialog" aria-labelledby="reportFormatModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form method="post" asp-page-handler="GenerateReport">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reportFormatModalLabel">Select Report Format</h5>
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="reportFormat">Report Format</label>
-                        <select class="form-control" name="format" id="reportFormat">
-                            <option value="PDF">PDF</option>
-                            <option value="Excel">Excel</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Generate Report</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            $('#reportFormatModal').on('show.bs.modal', function (e) {
-                $(this).find('form')[0].reset();
-            });
-
-            // Add loading indicator
-            $('form[asp-page-handler="GenerateReport"]').on('submit', function() {
-                $('#generateReportBtn').prop('disabled', true);
-                $('#generateReportBtn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...');
-            });
-        });
-    </script>
-}
 
 <script>
     // JavaScript for passing data to modal input fields

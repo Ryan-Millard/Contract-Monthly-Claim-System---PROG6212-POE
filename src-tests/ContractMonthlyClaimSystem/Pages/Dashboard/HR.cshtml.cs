@@ -26,14 +26,29 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
         public IList<User> Lecturers { get; set; }
         public string PaymentSummary { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole == "Lecturer")
+            {
+                return RedirectToPage("/Dashboard/Lecturer");
+            }
+			else if (userRole == "Admin")
+            {
+                return RedirectToPage("/Dashboard/Admin");
+            }
+            else if (userRole != "HR")
+            {
+                return RedirectToPage("/Users/Login");
+            }
+
             ApprovedClaims = await _context.Claims
                 .Where(c => c.Status == Status.Approved)
                 .Include(c => c.User)
                 .ToListAsync();
             Lecturers = await _context.User.ToListAsync();
             PaymentSummary = $"Total Claims: {ApprovedClaims.Count}, Total Amount: {ApprovedClaims.Sum(c => c.TotalAmount).ToString("F2")}";
+			return Page();
         }
 
         public async Task<IActionResult> OnPostProcessPaymentAsync(int claimId)
@@ -66,7 +81,6 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			var claims = await _context.Claims
 				.Where(c => c.Status == Status.Approved)
 				.Include(c => c.User)
-				.Select(c => new { c.User.FirstName, c.User.LastName, c.HoursWorked, c.TotalAmount })
 				.ToListAsync();
 
 			if (!claims.Any())

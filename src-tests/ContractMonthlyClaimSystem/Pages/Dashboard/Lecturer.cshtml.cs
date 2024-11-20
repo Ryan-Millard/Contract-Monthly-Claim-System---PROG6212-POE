@@ -25,8 +25,11 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
         public IActionResult OnGet()
         {
             var userRole = HttpContext.Session.GetString("UserRole");
-
-            if (userRole == "Admin")
+            if (userRole == "HR")
+            {
+                return RedirectToPage("/Dashboard/HR");
+            }
+			else if (userRole == "Admin")
             {
                 return RedirectToPage("/Dashboard/Admin");
             }
@@ -34,6 +37,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
             {
                 return RedirectToPage("/Users/Login");
             }
+
 
             // Fetch claims for the logged-in user
             var userId = HttpContext.Session.GetString("UserId"); // Assuming you store UserId in session
