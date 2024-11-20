@@ -42,7 +42,8 @@
 			var truncatedFileName = doc.FileName.Length > 50
 				? doc.FileName.Substring(0, 50) + "..."
 				: doc.FileName;
-			var fileHref = Url.Content("~/" + doc.FilePath);
+			var filePath = doc.FilePath.Replace("wwwroot/", "");
+			var fileHref = Url.Content("~/" + filePath);
 			<a href="@fileHref" class="text-decoration-none" target="_blank">
 				@doc.FileName
 				@if (doc != Model.Claim.SupportingDocuments.Last()) { <span>, </span><br /> }
