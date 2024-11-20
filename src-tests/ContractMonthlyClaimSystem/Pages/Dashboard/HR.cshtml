@@ -4,17 +4,20 @@
     ViewData["Title"] = "HR Dashboard";
 }
 
-<h1>HR Dashboard</h1>
+<h1 class="text-center">HR Dashboard</h1>
+
+<!-- Display Payment Summary -->
 
 <!-- Display Approved Claims -->
-<h2>Approved Claims</h2>
+<h2 class="text-center">Claims Pending Payment</h2>
+<p class="text-center">@Model.PaymentSummary</p>
 <table class="table">
     <thead>
         <tr>
             <th>Lecturer</th>
             <th>Hours Worked</th>
-            <th>Hourly Rate</th>
-            <th>Total Amount</th>
+            <th>Hourly Rate (R)</th>
+            <th>Total Amount (R)</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -28,7 +31,7 @@
                 <td>@claim.TotalAmount.ToString("F2")</td>
                 <td>
                     <form method="post" asp-page-handler="ProcessPayment" asp-route-claimId="@claim.Id">
-                        <button type="submit" class="btn btn-primary">Process Payment</button>
+                        <button type="submit" class="btn btn-primary">Mark as Paid</button>
                     </form>
                 </td>
             </tr>
@@ -36,12 +39,8 @@
     </tbody>
 </table>
 
-<!-- Display Payment Summary -->
-<h3>Payment Summary</h3>
-<p>@Model.PaymentSummary</p>
-
 <!-- Lecturer Data Management -->
-<h2>Manage Lecturer Data</h2>
+<h2 class="text-center">Manage Lecturer Data</h2>
 <table class="table">
     <thead>
         <tr>
@@ -117,9 +116,11 @@
 </div>
 
 <!-- Generate Report button -->
-<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reportFormatModal">
-    Download Payment Report
-</button>
+<div class="text-center">
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reportFormatModal">
+		Download Payment Report
+	</button>
+</div>
 
 <!-- Report Format Selection Modal -->
 <div class="modal fade" id="reportFormatModal" tabindex="-1" role="dialog" aria-labelledby="reportFormatModalLabel" aria-hidden="true">

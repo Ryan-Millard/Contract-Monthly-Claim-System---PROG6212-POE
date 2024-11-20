@@ -66,6 +66,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			var claims = await _context.Claims
 				.Where(c => c.Status == Status.Approved)
 				.Include(c => c.User)
+				.Select(c => new { c.User.FirstName, c.User.LastName, c.HoursWorked, c.TotalAmount })
 				.ToListAsync();
 
 			if (!claims.Any())
@@ -78,8 +79,8 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 				? ReportFormat.Excel
 				: ReportFormat.PDF;
 
-			// Generate report with selected format
-			byte[] reportBytes = _reportService.GenerateClaimReport(claims, reportFormat);
+			// Generate report with selected format on a new thread
+			byte[] reportBytes = await Task.Run(() => _reportService.GenerateClaimReport(claims, reportFormat));
 
 			// Set appropriate content type and file extension
 			string contentType = reportFormat == ReportFormat.PDF
