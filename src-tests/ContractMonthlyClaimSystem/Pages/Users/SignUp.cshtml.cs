@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ContractMonthlyClaimSystem.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractMonthlyClaimSystem.Pages.Users
 {
@@ -33,6 +34,14 @@ namespace ContractMonthlyClaimSystem.Pages.Users
 		{
 			if (!ModelState.IsValid)
 			{
+				return Page();
+			}
+
+			// Check if the email already exists
+			var existingUser = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == NewUser.Email);
+			if (existingUser != null)
+			{
+				ModelState.AddModelError("NewUser.Email", "Email is already registered.");
 				return Page();
 			}
 

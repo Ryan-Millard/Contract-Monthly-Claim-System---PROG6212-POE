@@ -1,0 +1,187 @@
+@page
+@model ContractMonthlyClaimSystem.Pages.Dashboard.HrModel
+@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<h1>HR Dashboard</h1>
+
+<!-- Display Approved Claims -->
+<h2>Approved Claims</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lecturer</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Total Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in Model.ApprovedClaims)
+        {
+            <tr>
+                <td>@claim.User.FirstName</td>
+                <td>@claim.HoursWorked.ToString("F2")</td>
+                <td>@claim.HourlyRate.ToString("F2")</td>
+                <td>@claim.TotalAmount.ToString("F2")</td>
+                <td>
+                    <form method="post" asp-page-handler="ProcessPayment" asp-route-claimId="@claim.Id">
+                        <button type="submit" class="btn btn-primary">Process Payment</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Display Payment Summary -->
+<h3>Payment Summary</h3>
+<p>@Model.PaymentSummary</p>
+
+<!-- Lecturer Data Management -->
+<h2>Manage Lecturer Data</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lecturer Name</th>
+            <th>Contact Info</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lecturer in Model.Lecturers)
+        {
+            <tr>
+                <td>@lecturer.FullName</td>
+                <td>@lecturer.Email</td>
+                <td>@lecturer.Role</td>
+                <td>
+                    <!-- Button to open modal for editing lecturer -->
+                    <button class="btn btn-info" data-toggle="modal" data-target="#updateLecturerModal" 
+                        data-lecturer-id="@lecturer.Id" 
+                        data-lecturer-firstname="@lecturer.FirstName"
+                        data-lecturer-lastname="@lecturer.LastName"
+                        data-lecturer-email="@lecturer.Email"
+                        data-lecturer-role="@lecturer.Role">Edit</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Lecturer Edit Modal -->
+<div class="modal fade" id="updateLecturerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="UpdateLecturer">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Lecturer</h5>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Hidden field for lecturer ID -->
+                    <input type="hidden" name="lecturerId" id="lecturerId" />
+                    <div class="form-group">
+                        <label for="lecturerFirstName">First Name</label>
+                        <input type="text" class="form-control" name="firstName" id="lecturerFirstName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="lecturerLastName">Last Name</label>
+                        <input type="text" class="form-control" name="lastName" id="lecturerLastName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="lecturerEmail">Email</label>
+                        <input type="email" class="form-control" name="email" id="lecturerEmail" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="lecturerRole">Role</label>
+                        <select class="form-control" name="role" id="lecturerRole">
+                            <option value="Lecturer">Lecturer</option>
+                            <option value="Admin">Admin</option>
+                            <option value="HR">HR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Generate Report button -->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reportFormatModal">
+    Download Payment Report
+</button>
+
+<!-- Report Format Selection Modal -->
+<div class="modal fade" id="reportFormatModal" tabindex="-1" role="dialog" aria-labelledby="reportFormatModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="GenerateReport">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportFormatModalLabel">Select Report Format</h5>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reportFormat">Report Format</label>
+                        <select class="form-control" name="format" id="reportFormat">
+                            <option value="PDF">PDF</option>
+                            <option value="Excel">Excel</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#reportFormatModal').on('show.bs.modal', function (e) {
+                $(this).find('form')[0].reset();
+            });
+
+            // Add loading indicator
+            $('form[asp-page-handler="GenerateReport"]').on('submit', function() {
+                $('#generateReportBtn').prop('disabled', true);
+                $('#generateReportBtn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...');
+            });
+        });
+    </script>
+}
+
+<script>
+    // JavaScript for passing data to modal input fields
+    $('#updateLecturerModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var lecturerId = button.data('lecturer-id');
+        var firstName = button.data('lecturer-firstname');
+        var lastName = button.data('lecturer-lastname');
+        var email = button.data('lecturer-email');
+        var role = button.data('lecturer-role');
+
+        var modal = $(this);
+        modal.find('#lecturerId').val(lecturerId);
+        modal.find('#lecturerFirstName').val(firstName);
+        modal.find('#lecturerLastName').val(lastName);
+        modal.find('#lecturerEmail').val(email);
+        modal.find('#lecturerRole').val(role);
+    });
+</script>
+

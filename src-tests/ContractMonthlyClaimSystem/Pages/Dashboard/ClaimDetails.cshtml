@@ -52,7 +52,7 @@
 
 	@if(HttpContext.Session.GetString("UserRole") == "Admin")
 	{
-		<form method="post" asp-route-id="@Model.Claim.Id" asp-page-handler="UpdateStatus">
+		<form method="post" id="statusChangeForm" asp-route-id="@Model.Claim.Id" asp-page-handler="UpdateStatus">
 			<div class="row align-items-center">
 				<div class="col-md-8">
 					<div class="form-group mb-0">
@@ -84,32 +84,32 @@
 				</div>
 			</div>
 		</form>
+
+	<script>
+		document.getElementById('status').addEventListener('change', function() {
+			const selectedStatus = this.value;
+			const rejectionReasonDiv = document.getElementById("rejectionReasonDiv");
+			const rejectionReasonField = document.getElementById("rejectionReason");
+
+			if (selectedStatus === 'Rejected') {
+				rejectionReasonDiv.style.display = "block";
+				rejectionReasonField.setAttribute("required", "required");  // Make the rejection reason required
+			} else {
+				rejectionReasonDiv.style.display = "none";
+				rejectionReasonField.removeAttribute("required");  // Remove the required attribute if not "Rejected"
+			}
+		});
+
+		// Form validation on submit
+		document.getElementById("statusChangeForm").addEventListener("submit", function(event) {
+			const statusSelect = document.getElementById('status');
+			const rejectionReason = document.getElementById("rejectionReason");
+
+			if (statusSelect.value === 'Rejected' && !rejectionReason.value.trim()) {
+				event.preventDefault();  // Prevent form submission
+				alert("Please provide a reason for rejection.");  // Display an alert or show an error message
+			}
+		});
+	</script>
 	}
 </div>
-
-<script>
-    document.getElementById('status').addEventListener('change', function() {
-        const selectedStatus = this.value;
-        const rejectionReasonDiv = document.getElementById("rejectionReasonDiv");
-        const rejectionReasonField = document.getElementById("rejectionReason");
-
-        if (selectedStatus === 'Rejected') {
-            rejectionReasonDiv.style.display = "block";
-            rejectionReasonField.setAttribute("required", "required");  // Make the rejection reason required
-        } else {
-            rejectionReasonDiv.style.display = "none";
-            rejectionReasonField.removeAttribute("required");  // Remove the required attribute if not "Rejected"
-        }
-    });
-
-    // Form validation on submit
-    document.querySelector("form").addEventListener("submit", function(event) {
-        const statusSelect = document.getElementById('status');
-        const rejectionReason = document.getElementById("rejectionReason");
-
-        if (statusSelect.value === 'Rejected' && !rejectionReason.value.trim()) {
-            event.preventDefault();  // Prevent form submission
-            alert("Please provide a reason for rejection.");  // Display an alert or show an error message
-        }
-    });
-</script>

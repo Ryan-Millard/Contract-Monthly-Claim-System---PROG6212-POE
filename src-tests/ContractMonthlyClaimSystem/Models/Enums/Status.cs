@@ -4,6 +4,7 @@ namespace ContractMonthlyClaimSystem.Models.Enums
 	{
 		Pending,
 		Approved,
-		Rejected
+		Rejected,
+		Paid
 	}
 }

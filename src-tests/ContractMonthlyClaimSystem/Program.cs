@@ -1,8 +1,11 @@
 using ContractMonthlyClaimSystem.Models;
 using ContractMonthlyClaimSystem.Middleware;
+using ContractMonthlyClaimSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ContractMonthlyClaimSystem.Data;
+using iText.Kernel.Pdf;
+using iText.IO.Source;
 
 namespace ContractMonthlyClaimSystem
 {
@@ -22,19 +25,24 @@ namespace ContractMonthlyClaimSystem
 
 			// Add session services
 			builder.Services.AddSession(options =>
-			{
-				options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
-				options.Cookie.HttpOnly = true; // Set cookie properties
-				options.Cookie.IsEssential = false; // Make the cookie essential
-			});
+					{
+					options.IdleTimeout = TimeSpan.FromMinutes(30);
+					options.Cookie.HttpOnly = true;
+					options.Cookie.IsEssential = false;
+					});
 
 			// Configure authentication
 			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 				.AddCookie(options =>
-			{
-				options.LoginPath = "/Users/Login"; // Redirect here if not authenticated
-				options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect here for forbidden access
-			});
+						{
+						options.LoginPath = "/Users/Login";
+						options.AccessDeniedPath = "/Account/AccessDenied";
+						});
+
+			// Register ReportService as Scoped
+			builder.Services.AddScoped<IReportService, ReportService>();
+
+			builder.Services.AddMvc().AddXmlSerializerFormatters();
 
 			var app = builder.Build();
 
@@ -47,14 +55,11 @@ namespace ContractMonthlyClaimSystem
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-
 			app.UseRouting();
 			app.UseSession();
 			app.UseAuthentication();
 			app.UseAuthorization();
-			app.UseStaticFiles();
 			app.UseMiddleware<CookieSessionMiddleware>();
-
 			app.MapRazorPages();
 
 			app.Run();

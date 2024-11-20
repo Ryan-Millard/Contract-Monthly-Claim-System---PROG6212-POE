@@ -19,6 +19,10 @@ namespace ContractMonthlyClaimSystem.Pages
 			{
 				return RedirectToPage("/Dashboard/Admin");
 			}
+			else if (userRole == "HR")
+			{
+				return RedirectToPage("/Dashboard/HR");
+			}
 
 			TempData["ModalPopUpHeading"] = "Not Logged In";
 			TempData["ModalPopUpMessage"] = "You need to be logged in to view that page, so you have been redirected to the Login page.";

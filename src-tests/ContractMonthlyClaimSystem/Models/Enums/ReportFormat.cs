@@ -1,9 +1,8 @@
 namespace ContractMonthlyClaimSystem.Models.Enums
 {
-	public enum Role
+	public enum ReportFormat
 	{
-		Lecturer,
-		Admin,
-		HR
+		PDF,
+		Excel
 	}
 }
