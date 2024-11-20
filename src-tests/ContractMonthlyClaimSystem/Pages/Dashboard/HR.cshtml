@@ -11,33 +11,41 @@
 <!-- Display Approved Claims -->
 <h2 class="text-center">Claims Pending Payment</h2>
 <p class="text-center">@Model.PaymentSummary</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Lecturer</th>
-            <th>Hours Worked</th>
-            <th>Hourly Rate (R)</th>
-            <th>Total Amount (R)</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var claim in Model.ApprovedClaims)
-        {
+
+@if (!Model.ApprovedClaims.Any())
+{
+    <p class="text-center">No approved claims pending payment.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@claim.User.FirstName</td>
-                <td>@claim.HoursWorked.ToString("F2")</td>
-                <td>@claim.HourlyRate.ToString("F2")</td>
-                <td>@claim.TotalAmount.ToString("F2")</td>
-                <td>
-                    <form method="post" asp-page-handler="ProcessPayment" asp-route-claimId="@claim.Id">
-                        <button type="submit" class="btn btn-primary">Mark as Paid</button>
-                    </form>
-                </td>
+                <th>Lecturer</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate (R)</th>
+                <th>Total Amount (R)</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model.ApprovedClaims)
+            {
+                <tr>
+                    <td>@claim.User.FirstName</td>
+                    <td>@claim.HoursWorked.ToString("F2")</td>
+                    <td>@claim.HourlyRate.ToString("F2")</td>
+                    <td>@claim.TotalAmount.ToString("F2")</td>
+                    <td>
+                        <form method="post" asp-page-handler="ProcessPayment" asp-route-claimId="@claim.Id">
+                            <button type="submit" class="btn btn-primary">Mark as Paid</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 <!-- Generate Report button -->
 <div class="text-center">

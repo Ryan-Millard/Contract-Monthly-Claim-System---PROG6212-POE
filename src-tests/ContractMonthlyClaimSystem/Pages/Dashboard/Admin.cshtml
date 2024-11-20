@@ -62,11 +62,22 @@
                             </a>
                         }
                     </td>
-                    <td>
-						<span class="badge @(claim.Status.ToString() == "Approved" ? "bg-success text-dark" : claim.Status.ToString() == "Pending" ? "bg-warning text-dark" : "bg-danger text-dark")">
-                            @claim.Status
-                        </span>
-                    </td>
+					<td class="text-center">
+						@{
+							var statusClasses = new Dictionary<string, string>
+							{
+								{ "Approved", "bg-success" },
+								{ "Pending", "bg-warning" },
+								{ "Paid", "bg-primary" },
+								{ "Rejected", "bg-danger" }
+							};
+
+							string claimStatusBg = statusClasses.ContainsKey(claim.Status.ToString()) ? statusClasses[claim.Status.ToString()] : "bg-danger text-dark";
+						}
+						<span class="badge @claimStatusBg text-dark">
+							@claim.Status
+						</span>
+					</td>
                     <td>
                         <a href="@Url.Page("/Dashboard/ClaimDetails", new { id = claim.Id })" class="btn btn-info btn-sm">View</a>
                     </td>
