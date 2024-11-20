@@ -11,112 +11,120 @@ using ContractMonthlyClaimSystem.Models.Enums;
 
 namespace ContractMonthlyClaimSystem.Services
 {
-    public interface IReportService
-    {
-        byte[] GenerateClaimReport(List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF);
-    }
+	public interface IReportService
+	{
+		byte[] GenerateClaimReport(List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF);
+	}
 
-    public class ReportService : IReportService
-    {
-        private readonly CultureInfo zaCulture = new CultureInfo("en-ZA");
+	public class ReportService : IReportService
+	{
+		private readonly CultureInfo zaCulture = new CultureInfo("en-ZA");
 
-        public byte[] GenerateClaimReport(List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF)
-        {
-            return format switch
-            {
-                ReportFormat.PDF => GeneratePdfReport(claims),
-                ReportFormat.Excel => GenerateExcelReport(claims),
-                _ => throw new ArgumentException("Unsupported format", nameof(format))
-            };
-        }
+		public byte[] GenerateClaimReport(List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF)
+		{
+			return format switch
+			{
+				ReportFormat.PDF => GeneratePdfReport(claims),
+					ReportFormat.Excel => GenerateExcelReport(claims),
+					_ => throw new ArgumentException("Unsupported format", nameof(format))
+			};
+		}
 
-        private byte[] GeneratePdfReport(List<MonthlyClaim> claims)
-        {
-            using var memoryStream = new MemoryStream();
-            var writer = new PdfWriter(memoryStream);
-            var pdf = new PdfDocument(writer);
-            var document = new Document(pdf);
+		private byte[] GeneratePdfReport(List<MonthlyClaim> claims)
+		{
+			using var memoryStream = new MemoryStream();
+			var writer = new PdfWriter(memoryStream);
+			var pdf = new PdfDocument(writer);
+			var document = new Document(pdf);
 
-            // Add title
-            document.Add(new Paragraph("Monthly Claims Report")
-                .SetTextAlignment(TextAlignment.CENTER)
-                .SetFontSize(20));
+			// Add title
+			document.Add(new Paragraph("Monthly Claims Report")
+					.SetTextAlignment(TextAlignment.CENTER)
+					.SetFontSize(20));
 
-            // Create table
-            var table = new Table(3).UseAllAvailableWidth();
-            
-            // Add headers
-            table.AddCell(new Cell().Add(new Paragraph("Lecturer")));
-            table.AddCell(new Cell().Add(new Paragraph("Hours Worked")));
-            table.AddCell(new Cell().Add(new Paragraph("Total Amount")));
+			// Create table
+			var table = new Table(5).UseAllAvailableWidth();
 
-            // Add data rows
-            foreach (var claim in claims)
-            {
-                table.AddCell(new Cell().Add(new Paragraph($"{claim.User?.FirstName} {claim.User?.LastName}")));
-                table.AddCell(new Cell().Add(new Paragraph(claim.HoursWorked.ToString("C", zaCulture))));
-                table.AddCell(new Cell().Add(new Paragraph(claim.TotalAmount.ToString("C", zaCulture))));
-            }
+			// Add headers
+			table.AddCell(new Cell().Add(new Paragraph(("Lecturer"))));
+			table.AddCell(new Cell().Add(new Paragraph("Course")));
+			table.AddCell(new Cell().Add(new Paragraph("Hourly Rate")));
+			table.AddCell(new Cell().Add(new Paragraph("Hours Worked")));
+			table.AddCell(new Cell().Add(new Paragraph("Total Amount")));
 
-            // Add summary section
-            document.Add(table);
-            document.Add(new Paragraph($"\nTotal Claims: {claims.Count}")
-                .SetTextAlignment(TextAlignment.LEFT));
-            document.Add(new Paragraph($"Total Amount: {claims.Sum(c => c.TotalAmount).ToString("C", zaCulture)}")
-                .SetTextAlignment(TextAlignment.LEFT));
+			// Add data rows
+			foreach (var claim in claims)
+			{
+				table.AddCell(new Cell().Add(new Paragraph($"{claim.User?.FirstName} {claim.User?.LastName}")));
+				table.AddCell(new Cell().Add(new Paragraph(claim.Course.ToString())));
+				table.AddCell(new Cell().Add(new Paragraph(claim.HourlyRate.ToString("C", zaCulture))));
+				table.AddCell(new Cell().Add(new Paragraph(claim.HoursWorked.ToString("C", zaCulture))));
+				table.AddCell(new Cell().Add(new Paragraph(claim.TotalAmount.ToString("C", zaCulture))));
+			}
 
-            document.Close();
-            return memoryStream.ToArray();
-        }
+			// Add summary section
+			document.Add(table);
+			document.Add(new Paragraph($"\nTotal Claims: {claims.Count}")
+					.SetTextAlignment(TextAlignment.LEFT));
+			document.Add(new Paragraph($"Total Amount: {claims.Sum(c => c.TotalAmount).ToString("C", zaCulture)}")
+					.SetTextAlignment(TextAlignment.LEFT));
 
-        private byte[] GenerateExcelReport(List<MonthlyClaim> claims)
-        {
-            using var workbook = new XLWorkbook();
-            var worksheet = workbook.Worksheets.Add("Monthly Claims");
+			document.Close();
+			return memoryStream.ToArray();
+		}
 
-            // Add title
-            worksheet.Cell("A1").Value = "Monthly Claims Report";
-            worksheet.Range("A1:C1").Merge().Style.Font.SetBold().Font.SetFontSize(14);
+		private byte[] GenerateExcelReport(List<MonthlyClaim> claims)
+		{
+			using var workbook = new XLWorkbook();
+			var worksheet = workbook.Worksheets.Add("Monthly Claims");
 
-            // Add headers
-            worksheet.Cell("A2").Value = "Lecturer";
-            worksheet.Cell("B2").Value = "Hours Worked";
-            worksheet.Cell("C2").Value = "Total Amount";
-            
-            worksheet.Range("A2:C2").Style.Font.SetBold();
+			// Add title
+			worksheet.Cell("A1").Value = "Monthly Claims Report";
+			worksheet.Range("A1:E1").Merge().Style.Font.SetBold().Font.SetFontSize(14);
 
-            // Add data rows
-            var row = 3;
-            foreach (var claim in claims)
-            {
-                worksheet.Cell($"A{row}").Value = $"{claim.User?.FirstName} {claim.User?.LastName}";
-                worksheet.Cell($"B{row}").Value = claim.HoursWorked;
-                worksheet.Cell($"C{row}").Value = claim.TotalAmount;
-                worksheet.Cell($"C{row}").Style.NumberFormat.Format = "R #,##0.00";
-                row++;
-            }
+			// Add headers
+			worksheet.Cell("A2").Value = "Lecturer";
+			worksheet.Cell("B2").Value = "Course";
+			worksheet.Cell("C2").Value = "Hourly Rate";
+			worksheet.Cell("D2").Value = "Hours Worked";
+			worksheet.Cell("E2").Value = "Total Amount";
 
-            // Add summary section
-            row++;
-            worksheet.Cell($"A{row}").Value = "Total Claims:";
-            worksheet.Cell($"B{row}").Value = claims.Count;
-            
-            row++;
-            worksheet.Cell($"A{row}").Value = "Total Amount:";
-            worksheet.Cell($"B{row}").Value = claims.Sum(c => c.TotalAmount);
-            worksheet.Cell($"B{row}").Style.NumberFormat.Format = "R #,##0.00";
+			worksheet.Range("A2:E2").Style.Font.SetBold();
 
-            // Format the table
-            var tableRange = worksheet.Range($"A2:C{row}");
-            tableRange.Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
-            tableRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thin);
+			// Add data rows
+			var row = 3;
+			foreach (var claim in claims)
+			{
+				worksheet.Cell($"A{row}").Value = $"{claim.User?.FirstName} {claim.User?.LastName}";
+				worksheet.Cell($"B{row}").Value = claim.HourlyRate;
+				worksheet.Cell($"C{row}").Value = claim.Course.ToString();
+				worksheet.Cell($"D{row}").Value = claim.HoursWorked;
+				worksheet.Cell($"E{row}").Value = claim.TotalAmount;
+				worksheet.Cell($"E{row}").Style.NumberFormat.Format = "R #,##0.00";
+				row++;
+			}
 
-            // Auto-fit columns
-            worksheet.Columns().AdjustToContents();
+			// Add summary section
+			row++;
+			worksheet.Cell($"A{row}").Value = "Total Claims:";
+			worksheet.Cell($"B{row}").Value = claims.Count;
 
-            using var memoryStream = new MemoryStream();
-            workbook.SaveAs(memoryStream);
-            return memoryStream.ToArray();
-        }
-    }
+			row++;
+			worksheet.Cell($"A{row}").Value = "Total Amount:";
+			worksheet.Cell($"B{row}").Value = claims.Sum(c => c.TotalAmount);
+			worksheet.Cell($"B{row}").Style.NumberFormat.Format = "R #,##0.00";
+
+			// Format the table
+			var tableRange = worksheet.Range($"A2:E{row}");
+			tableRange.Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+			tableRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thin);
+
+			// Auto-fit columns
+			worksheet.Columns().AdjustToContents();
+
+			using var memoryStream = new MemoryStream();
+			workbook.SaveAs(memoryStream);
+			return memoryStream.ToArray();
+		}
+	}
 }
