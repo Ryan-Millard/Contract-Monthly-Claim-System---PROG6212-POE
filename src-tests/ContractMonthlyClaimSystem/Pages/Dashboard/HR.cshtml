@@ -22,6 +22,7 @@ else
         <thead>
             <tr>
                 <th>Lecturer</th>
+                <th>Course</th>
                 <th>Hours Worked</th>
                 <th>Hourly Rate (R)</th>
                 <th>Total Amount (R)</th>
@@ -33,6 +34,7 @@ else
             {
                 <tr>
                     <td>@claim.User.FirstName</td>
+                    <td>@claim.Course.ToString()</td>
                     <td>@claim.HoursWorked.ToString("F2")</td>
                     <td>@claim.HourlyRate.ToString("F2")</td>
                     <td>@claim.TotalAmount.ToString("F2")</td>
