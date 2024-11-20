@@ -26,14 +26,14 @@
 	<div class="form-group mb-3">
 		<label>Hours Worked</label>
 		<div>
-			<input type="number" step="1" class="form-control" asp-for="ClaimViewModel.HoursWorked" id="hoursWorked" min="0.5" max="160">
+			<input type="number" step="1" class="form-control" asp-for="ClaimViewModel.HoursWorked" id="hoursWorked">
 			<span asp-validation-for="ClaimViewModel.HoursWorked" class="text-danger"></span>
 		</div>
 	</div>
 	<div class="form-group mb-3">
 		<label>Hourly Rate</label>
 		<div>
-			<input type="number" step="0.01" class="form-control" asp-for="ClaimViewModel.HourlyRate" id="hourlyRate" min="150" max="500">
+			<input type="number" step="0.01" class="form-control" asp-for="ClaimViewModel.HourlyRate" id="hourlyRate">
 			<span asp-validation-for="ClaimViewModel.HourlyRate" class="text-danger"></span>
 		</div>
 	</div>
