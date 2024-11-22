@@ -13,6 +13,144 @@ The Contract Monthly Claim System (CMCS) is a .NET web-based application designe
 - **Styling**: Styled using Bootstrap for a responsive and modern user experience.
 - **Database**: SQL Server is used for managing data, with entities such as Users, Claims, ClaimStatus, Documents, and Courses.
 
+## File Structure
+```
+├───ContractMonthlyClaimSystem
+│   ├───bin
+│   │   └───Debug
+│   │       └───net8.0
+│   │           ├───cs
+│   │           ├───de
+│   │           ├───es
+│   │           ├───fr
+│   │           ├───it
+│   │           ├───ja
+│   │           ├───ko
+│   │           ├───pl
+│   │           ├───pt-BR
+│   │           ├───ru
+│   │           ├───runtimes
+│   │           │   ├───win
+│   │           │   │   └───lib
+│   │           │   │       └───net8.0
+│   │           │   └───win-x64
+│   │           │       └───native
+│   │           ├───tr
+│   │           ├───zh-Hans
+│   │           └───zh-Hant
+│   ├───Data
+│   ├───Middleware
+│   ├───Migrations
+│   ├───Models
+│   │   └───Enums
+│   ├───obj
+│   │   └───Debug
+│   │       └───net8.0
+│   │           ├───ref
+│   │           ├───refint
+│   │           ├───scopedcss
+│   │           │   ├───bundle
+│   │           │   ├───Pages
+│   │           │   │   └───Shared
+│   │           │   └───projectbundle
+│   │           └───staticwebassets
+│   ├───Pages
+│   │   ├───Dashboard
+│   │   │   └───Lecturer
+│   │   ├───Shared
+│   │   └───Users
+│   ├───Properties
+│   ├───Services
+│   ├───uploads
+│   ├───Validation
+│   └───wwwroot
+│       ├───css
+│       ├───images
+│       ├───js
+│       ├───lib
+│       │   ├───bootstrap
+│       │   │   └───dist
+│       │   │       ├───css
+│       │   │       └───js
+│       │   ├───jquery
+│       │   │   └───dist
+│       │   ├───jquery-validation
+│       │   │   └───dist
+│       │   └───jquery-validation-unobtrusive
+│       └───uploads
+│           ├───1
+│           ├───2
+│           ├───3
+│           ├───4
+│           ├───5
+│           ├───6
+│           ├───7
+│           ├───8
+│           └───9
+└───ContractMonthlyClaimSystem.Tests
+    ├───bin
+    │   └───Debug
+    │       └───net8.0
+    │           ├───cs
+    │           ├───de
+    │           ├───es
+    │           ├───fr
+    │           ├───it
+    │           ├───ja
+    │           ├───ko
+    │           ├───pl
+    │           ├───pt-BR
+    │           ├───ru
+    │           ├───runtimes
+    │           │   └───win
+    │           │       └───lib
+    │           │           └───netstandard2.0
+    │           ├───tr
+    │           ├───zh-Hans
+    │           └───zh-Hant
+    ├───Data
+    ├───Middleware
+    ├───Models
+    │   └───Enums
+    ├───obj
+    │   └───Debug
+    │       └───net8.0
+    │           ├───ref
+    │           └───refint
+    ├───Pages
+    └───Validation
+```
+
+## Dependencies
+### `ContractMonthlyClaimSystem` Project
+| Top-level Package                                    | Requested | Resolved |
+|------------------------------------------------------|-----------|----------|
+| ClosedXML                                            | 0.104.2   | 0.104.2  |
+| itext7                                               | 9.0.0     | 9.0.0    |
+| itext7.bouncy-castle-adapter                         | 9.0.0     | 9.0.0    |
+| Microsoft.AspNetCore.Authentication.Cookies          | 2.2.0     | 2.2.0    |
+| Microsoft.AspNetCore.Http                             | 2.2.2     | 2.2.2    |
+| Microsoft.EntityFrameworkCore                         | 8.0.8     | 8.0.8    |
+| Microsoft.EntityFrameworkCore.InMemory                | 8.0.8     | 8.0.8    |
+| Microsoft.EntityFrameworkCore.Proxies                 | 8.0.8     | 8.0.8    |
+| Microsoft.EntityFrameworkCore.Tools                   | 8.0.8     | 8.0.8    |
+| Pomelo.EntityFrameworkCore.MySql                      | 8.0.2     | 8.0.2    |
+
+### `ContractMonthlyClaimSystem.Tests` Project
+| Top-level Package                                | Requested | Resolved |
+|--------------------------------------------------|-----------|----------|
+| coverlet.collector                               | 6.0.0     | 6.0.0    |
+| FluentAssertions                                 | 6.12.1    | 6.12.1  |
+| FluentValidation                                 | 11.10.0   | 11.10.0 |
+| Microsoft.AspNetCore.Mvc.RazorPages              | 2.2.5     | 2.2.5   |
+| Microsoft.EntityFrameworkCore.Relational         | 8.0.8     | 8.0.8   |
+| Microsoft.Extensions.Logging.Abstractions        | 8.0.2     | 8.0.2   |
+| Microsoft.NET.Test.Sdk                           | 17.6.0    | 17.6.0  |
+| Moq                                              | 4.20.72   | 4.20.72 |
+| xunit                                            | 2.9.2     | 2.9.2   |
+| xunit.runner.visualstudio                        | 2.4.5     | 2.4.5   |
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -25,15 +163,17 @@ The Contract Monthly Claim System (CMCS) is a .NET web-based application designe
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/Ryan-Millard/Contract-Monthly-Claim-System---PROG6212-POE.git
-   cd src-test/ContractMonthlyClaimSystem
+   cd src-test
    ```
 
 2. **Install Dependencies**:
+   Run the below in the `ContractMonthlyClaimSystem` and `ContractMonthlyClaimSystem.Tests` directories.
    ```bash
    dotnet restore
    ```
 
-3. **Run the Application**:
+4. **Run the Application**:
+   Run this code in the `ContractMonthlyClaimSystem` directory.
    ```bash
    dotnet run
    ```
