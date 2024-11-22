@@ -235,8 +235,8 @@ namespace ContractMonthlyClaimSystem.Services
 			var row = 7;
 			foreach (var groupedClaim in groupedClaims)
 			{
-				worksheet.Cell($"A{row}").Value = groupedClaim.Course.ToString();
-				worksheet.Cell($"B{row}").Value = groupedClaim.HourlyRate;
+				worksheet.Cell($"A{row}").Value = groupedClaim.HourlyRate;
+				worksheet.Cell($"B{row}").Value = groupedClaim.Course.ToString();
 				worksheet.Cell($"C{row}").Value = groupedClaim.TotalHoursWorked;
 				worksheet.Cell($"D{row}").Value = groupedClaim.TotalAmount;
 				worksheet.Cell($"D{row}").Style.NumberFormat.Format = "R #,##0.00";
