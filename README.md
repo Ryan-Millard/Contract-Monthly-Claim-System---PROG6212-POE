@@ -13,113 +13,231 @@ The Contract Monthly Claim System (CMCS) is a .NET web-based application designe
 - **Styling**: Styled using Bootstrap for a responsive and modern user experience.
 - **Database**: SQL Server is used for managing data, with entities such as Users, Claims, ClaimStatus, Documents, and Courses.
 
-## File Structure
-```
-├───ContractMonthlyClaimSystem
-│   ├───bin
-│   │   └───Debug
-│   │       └───net8.0
-│   │           ├───cs
-│   │           ├───de
-│   │           ├───es
-│   │           ├───fr
-│   │           ├───it
-│   │           ├───ja
-│   │           ├───ko
-│   │           ├───pl
-│   │           ├───pt-BR
-│   │           ├───ru
-│   │           ├───runtimes
-│   │           │   ├───win
-│   │           │   │   └───lib
-│   │           │   │       └───net8.0
-│   │           │   └───win-x64
-│   │           │       └───native
-│   │           ├───tr
-│   │           ├───zh-Hans
-│   │           └───zh-Hant
-│   ├───Data
-│   ├───Middleware
-│   ├───Migrations
-│   ├───Models
-│   │   └───Enums
-│   ├───obj
-│   │   └───Debug
-│   │       └───net8.0
-│   │           ├───ref
-│   │           ├───refint
-│   │           ├───scopedcss
-│   │           │   ├───bundle
-│   │           │   ├───Pages
-│   │           │   │   └───Shared
-│   │           │   └───projectbundle
-│   │           └───staticwebassets
-│   ├───Pages
-│   │   ├───Dashboard
-│   │   │   └───Lecturer
-│   │   ├───Shared
-│   │   └───Users
-│   ├───Properties
-│   ├───Services
-│   ├───uploads
-│   ├───Validation
-│   └───wwwroot
-│       ├───css
-│       ├───images
-│       ├───js
-│       ├───lib
-│       │   ├───bootstrap
-│       │   │   └───dist
-│       │   │       ├───css
-│       │   │       └───js
-│       │   ├───jquery
-│       │   │   └───dist
-│       │   ├───jquery-validation
-│       │   │   └───dist
-│       │   └───jquery-validation-unobtrusive
-│       └───uploads
-│           ├───1
-│           ├───2
-│           ├───3
-│           ├───4
-│           ├───5
-│           ├───6
-│           ├───7
-│           ├───8
-│           └───9
-└───ContractMonthlyClaimSystem.Tests
-    ├───bin
-    │   └───Debug
-    │       └───net8.0
-    │           ├───cs
-    │           ├───de
-    │           ├───es
-    │           ├───fr
-    │           ├───it
-    │           ├───ja
-    │           ├───ko
-    │           ├───pl
-    │           ├───pt-BR
-    │           ├───ru
-    │           ├───runtimes
-    │           │   └───win
-    │           │       └───lib
-    │           │           └───netstandard2.0
-    │           ├───tr
-    │           ├───zh-Hans
-    │           └───zh-Hant
-    ├───Data
-    ├───Middleware
-    ├───Models
-    │   └───Enums
-    ├───obj
-    │   └───Debug
-    │       └───net8.0
-    │           ├───ref
-    │           └───refint
-    ├───Pages
-    └───Validation
-```
+## File Structure (Click to expand/collapse)
+<section>
+  <details>
+    <summary>ContractMonthlyClaimSystem</summary>
+    <ul>
+      <li>bin
+        <ul>
+          <li>Debug
+            <ul>
+              <li>net8.0
+                <ul>
+                  <li>cs</li>
+                  <li>de</li>
+                  <li>es</li>
+                  <li>fr</li>
+                  <li>it</li>
+                  <li>ja</li>
+                  <li>ko</li>
+                  <li>pl</li>
+                  <li>pt-BR</li>
+                  <li>ru</li>
+                  <li>runtimes
+                    <ul>
+                      <li>win
+                        <ul>
+                          <li>lib
+                            <ul>
+                              <li>net8.0</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>win-x64
+                        <ul>
+                          <li>native</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>tr</li>
+                  <li>zh-Hans</li>
+                  <li>zh-Hant</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Data</li>
+      <li>Middleware</li>
+      <li>Migrations</li>
+      <li>Models
+        <ul>
+          <li>Enums</li>
+        </ul>
+      </li>
+      <li>obj
+        <ul>
+          <li>Debug
+            <ul>
+              <li>net8.0
+                <ul>
+                  <li>ref</li>
+                  <li>refint</li>
+                  <li>scopedcss
+                    <ul>
+                      <li>bundle</li>
+                      <li>Pages
+                        <ul>
+                          <li>Shared</li>
+                        </ul>
+                      </li>
+                      <li>projectbundle</li>
+                    </ul>
+                  </li>
+                  <li>staticwebassets</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Pages
+        <ul>
+          <li>Dashboard
+            <ul>
+              <li>Lecturer</li>
+            </ul>
+          </li>
+          <li>Shared</li>
+          <li>Users</li>
+        </ul>
+      </li>
+      <li>Properties</li>
+      <li>Services</li>
+      <li>uploads
+        <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li>
+          <li>6</li>
+          <li>7</li>
+          <li>8</li>
+          <li>9</li>
+        </ul>
+      </li>
+      <li>Validation</li>
+      <li>wwwroot
+        <ul>
+          <li>css</li>
+          <li>images</li>
+          <li>js</li>
+          <li>lib
+            <ul>
+              <li>bootstrap
+                <ul>
+                  <li>dist
+                    <ul>
+                      <li>css</li>
+                      <li>js</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>jquery
+                <ul>
+                  <li>dist</li>
+                </ul>
+              </li>
+              <li>jquery-validation
+                <ul>
+                  <li>dist</li>
+                </ul>
+              </li>
+              <li>jquery-validation-unobtrusive</li>
+            </ul>
+          </li>
+          <li>uploads
+            <ul>
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+              <li>5</li>
+              <li>6</li>
+              <li>7</li>
+              <li>8</li>
+              <li>9</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>ContractMonthlyClaimSystem.Tests</summary>
+    <ul>
+      <li>bin
+        <ul>
+          <li>Debug
+            <ul>
+              <li>net8.0
+                <ul>
+                  <li>cs</li>
+                  <li>de</li>
+                  <li>es</li>
+                  <li>fr</li>
+                  <li>it</li>
+                  <li>ja</li>
+                  <li>ko</li>
+                  <li>pl</li>
+                  <li>pt-BR</li>
+                  <li>ru</li>
+                  <li>runtimes
+                    <ul>
+                      <li>win
+                        <ul>
+                          <li>lib
+                            <ul>
+                              <li>netstandard2.0</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>tr</li>
+                  <li>zh-Hans</li>
+                  <li>zh-Hant</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Data</li>
+      <li>Middleware</li>
+      <li>Models
+        <ul>
+          <li>Enums</li>
+        </ul>
+      </li>
+      <li>obj
+        <ul>
+          <li>Debug
+            <ul>
+              <li>net8.0
+                <ul>
+                  <li>ref</li>
+                  <li>refint</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Pages</li>
+      <li>Validation</li>
+    </ul>
+  </details>
+</section>
+
 
 ## Dependencies
 ### `ContractMonthlyClaimSystem` Project
