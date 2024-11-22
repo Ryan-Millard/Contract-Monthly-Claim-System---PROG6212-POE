@@ -13,12 +13,12 @@ namespace ContractMonthlyClaimSystem.Models
 
 		[BindProperty]
 		[Required(ErrorMessage = "Please enter hours worked.")]
-		[Range(0.01, double.MaxValue, ErrorMessage = "Please enter a valid number of hours.")]
+		[Range(0.5, 8 * 5 * 4, ErrorMessage = "Please enter a valid number of hours (between 0.5 and 160).")]
 		public decimal HoursWorked { get; set; } = 0;
 
 		[BindProperty]
 		[Required(ErrorMessage = "Please enter the hourly rate.")]
-		[Range(0.01, double.MaxValue, ErrorMessage = "Please enter a valid hourly rate.")]
+		[Range(150, 500, ErrorMessage = "Please enter a valid hourly rate (between 150 and 500).")]
 		public decimal HourlyRate { get; set; } = 0;
 
 		public decimal TotalAmount => HoursWorked * HourlyRate;

@@ -18,7 +18,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>Lecturer</th>
@@ -40,7 +40,7 @@ else
                     <td>@claim.TotalAmount.ToString("F2")</td>
                     <td>
                         <form method="post" asp-page-handler="ProcessPayment" asp-route-claimId="@claim.Id">
-                            <button type="submit" class="btn btn-primary">Mark as Paid</button>
+                            <button type="submit" class="btn btn-info">Mark as Paid</button>
                         </form>
                     </td>
                 </tr>
@@ -49,11 +49,17 @@ else
     </table>
 }
 
-<!-- Generate Report button -->
-<div class="text-center">
-	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reportFormatModal">
-		Download Payment Report
+<div class="row justify-content-center mb-4">
+    <div class="col-md-4 d-flex justify-content-center align-items-center">
+        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#reportFormatModal">
+            Download Reports
+        </button>
+    </div>
+    <div class="col-md-4 d-flex justify-content-center align-items-center">
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#invoiceFormatModal">
+		Download Invoices
 	</button>
+    </div>
 </div>
 
 <!-- Report Format Selection Modal -->
@@ -73,6 +79,17 @@ else
                         <select class="form-control" name="format" id="reportFormat">
                             <option value="PDF">PDF</option>
                             <option value="Excel">Excel</option>
+                        </select>
+                    </div>
+
+                    <!-- Claim Status Selection -->
+                    <div class="form-group">
+                        <label for="claimStatus">Claim Status</label>
+                        <select class="form-control" name="status" id="claimStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Approved" selected>Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Paid">Paid</option>
                         </select>
                     </div>
                 </div>
@@ -100,11 +117,53 @@ else
         });
     </script>
 }
+
+<!-- Invoice Format Selection Modal -->
+<div class="modal fade" id="invoiceFormatModal" tabindex="-1" role="dialog" aria-labelledby="invoiceFormatModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="GenerateInvoice">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceFormatModalLabel">Select Invoice Format and Lecturer</h5>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="invoiceFormat">Invoice Format</label>
+                        <select class="form-control" name="format" id="invoiceFormat">
+                            <option value="PDF">PDF</option>
+                            <option value="Excel">Excel</option>
+                        </select>
+                    </div>
+
+                    <!-- Lecturer Selection -->
+                    <div class="form-group">
+                        <label for="lecturerSelect">Lecturer</label>
+                        <select class="form-control" name="lecturerId" id="lecturerSelect">
+                            @foreach (var lecturer in Model.Lecturers)
+                            {
+                                <option value="@lecturer.Id">@lecturer.FullName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate Invoice</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <br>
 
 <!-- Lecturer Data Management -->
 <h2 class="text-center">Manage Lecturer Data</h2>
-<table class="table">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>Lecturer Name</th>

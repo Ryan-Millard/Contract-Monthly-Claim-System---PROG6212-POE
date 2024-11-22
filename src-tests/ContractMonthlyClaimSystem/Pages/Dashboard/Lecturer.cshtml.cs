@@ -45,6 +45,7 @@ namespace ContractMonthlyClaimSystem.Pages.Dashboard
 			// Start with the base query for claims
 			var query = _context.Claims
 				.Where(c => c.UserId == userId)  // Filter claims by the current user (Lecturer)
+				.Include(c => c.SupportingDocuments)
 				.AsQueryable();
 
 			if (!string.IsNullOrWhiteSpace(searchTerm))

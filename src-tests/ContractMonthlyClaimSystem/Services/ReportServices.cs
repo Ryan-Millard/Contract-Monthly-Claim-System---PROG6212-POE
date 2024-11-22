@@ -14,6 +14,7 @@ namespace ContractMonthlyClaimSystem.Services
 	public interface IReportService
 	{
 		byte[] GenerateClaimReport(List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF);
+		byte[] GenerateInvoice(User lecturer, List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF);
 	}
 
 	public class ReportService : IReportService
@@ -27,6 +28,16 @@ namespace ContractMonthlyClaimSystem.Services
 				ReportFormat.PDF => GeneratePdfReport(claims),
 					ReportFormat.Excel => GenerateExcelReport(claims),
 					_ => throw new ArgumentException("Unsupported format", nameof(format))
+			};
+		}
+
+		public byte[] GenerateInvoice(User lecturer, List<MonthlyClaim> claims, ReportFormat format = ReportFormat.PDF)
+		{
+			return format switch
+			{
+				ReportFormat.PDF => GeneratePdfInvoice(lecturer, claims),
+					ReportFormat.Excel => GenerateExcelInvoice(lecturer, claims),
+					_ => throw new ArgumentException("Unsupported format", nameof(format)),
 			};
 		}
 
@@ -58,7 +69,7 @@ namespace ContractMonthlyClaimSystem.Services
 				table.AddCell(new Cell().Add(new Paragraph($"{claim.User?.FirstName} {claim.User?.LastName}")));
 				table.AddCell(new Cell().Add(new Paragraph(claim.Course.ToString())));
 				table.AddCell(new Cell().Add(new Paragraph(claim.HourlyRate.ToString("C", zaCulture))));
-				table.AddCell(new Cell().Add(new Paragraph(claim.HoursWorked.ToString("C", zaCulture))));
+				table.AddCell(new Cell().Add(new Paragraph(claim.HoursWorked.ToString("F2"))));
 				table.AddCell(new Cell().Add(new Paragraph(claim.TotalAmount.ToString("C", zaCulture))));
 			}
 
@@ -116,6 +127,129 @@ namespace ContractMonthlyClaimSystem.Services
 
 			// Format the table
 			var tableRange = worksheet.Range($"A2:E{row}");
+			tableRange.Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+			tableRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thin);
+
+			// Auto-fit columns
+			worksheet.Columns().AdjustToContents();
+
+			using var memoryStream = new MemoryStream();
+			workbook.SaveAs(memoryStream);
+			return memoryStream.ToArray();
+		}
+
+		private byte[] GeneratePdfInvoice(User lecturer, List<MonthlyClaim> claims)
+		{
+			using var memoryStream = new MemoryStream();
+			var writer = new PdfWriter(memoryStream);
+			var pdf = new PdfDocument(writer);
+			var document = new Document(pdf);
+
+			// Add invoice title
+			document.Add(new Paragraph("Invoice")
+					.SetTextAlignment(TextAlignment.CENTER)
+					.SetFontSize(20));
+
+			// Add lecturer details
+			document.Add(new Paragraph($"Lecturer: {lecturer.FullName}")
+					.SetTextAlignment(TextAlignment.LEFT)
+					.SetFontSize(12));
+			document.Add(new Paragraph($"Email: {lecturer.Email}")
+					.SetTextAlignment(TextAlignment.LEFT)
+					.SetFontSize(12));
+			document.Add(new Paragraph($"Date: {DateTime.Now.ToString("dd MMMM yyyy", zaCulture)}")
+					.SetTextAlignment(TextAlignment.LEFT)
+					.SetFontSize(12));
+
+			// Group claims by course and calculate totals
+			var groupedClaims = claims.GroupBy(c => c.Course)
+				.Select(g => new
+						{
+						Course = g.Key,
+						TotalHoursWorked = g.Sum(c => c.HoursWorked),
+						HourlyRate = g.First().HourlyRate, // Assuming the rate is the same for the course
+						TotalAmount = g.Sum(c => c.TotalAmount)
+						}).ToList();
+
+			// Add table for claims
+			var table = new Table(4).UseAllAvailableWidth();
+
+			// Add headers
+			table.AddCell(new Cell().Add(new Paragraph("Course")));
+			table.AddCell(new Cell().Add(new Paragraph("Hours Worked")));
+			table.AddCell(new Cell().Add(new Paragraph("Hourly Rate")));
+			table.AddCell(new Cell().Add(new Paragraph("Total Amount")));
+
+			// Add aggregated data rows
+			foreach (var groupedClaim in groupedClaims)
+			{
+				table.AddCell(new Cell().Add(new Paragraph(groupedClaim.Course.ToString())));
+				table.AddCell(new Cell().Add(new Paragraph(groupedClaim.TotalHoursWorked.ToString("F2"))));
+				table.AddCell(new Cell().Add(new Paragraph(groupedClaim.HourlyRate.ToString("C", zaCulture))));
+				table.AddCell(new Cell().Add(new Paragraph(groupedClaim.TotalAmount.ToString("C", zaCulture))));
+			}
+
+			document.Add(table);
+
+			// Add total amount due
+			document.Add(new Paragraph($"\nTotal Due: {groupedClaims.Sum(g => g.TotalAmount).ToString("C", zaCulture)}")
+					.SetTextAlignment(TextAlignment.RIGHT)
+					.SetFontSize(12));
+
+			document.Close();
+			return memoryStream.ToArray();
+		}
+
+		private byte[] GenerateExcelInvoice(User lecturer, List<MonthlyClaim> claims)
+		{
+			using var workbook = new XLWorkbook();
+			var worksheet = workbook.Worksheets.Add("Invoice");
+
+			// Add title
+			worksheet.Cell("A1").Value = "Invoice";
+			worksheet.Range("A1:D1").Merge().Style.Font.SetBold().Font.SetFontSize(14);
+
+			// Add lecturer details
+			worksheet.Cell("A2").Value = $"Lecturer: {lecturer.FullName}";
+			worksheet.Cell("A3").Value = $"Email: {lecturer.Email}";
+			worksheet.Cell("A4").Value = $"Date: {DateTime.Now.ToString("dd MMMM yyyy", zaCulture)}";
+
+			// Add headers
+			worksheet.Cell("A6").Value = "Course";
+			worksheet.Cell("B6").Value = "Hourly Rate";
+			worksheet.Cell("C6").Value = "Hours Worked";
+			worksheet.Cell("D6").Value = "Total Amount";
+			worksheet.Range("A6:D6").Style.Font.SetBold();
+
+			// Group claims by course and calculate totals
+			var groupedClaims = claims.GroupBy(c => c.Course)
+				.Select(g => new
+						{
+						Course = g.Key,
+						TotalHoursWorked = g.Sum(c => c.HoursWorked),
+						HourlyRate = g.First().HourlyRate,
+						TotalAmount = g.Sum(c => c.TotalAmount)
+						}).ToList();
+
+			// Add aggregated data rows
+			var row = 7;
+			foreach (var groupedClaim in groupedClaims)
+			{
+				worksheet.Cell($"A{row}").Value = groupedClaim.Course.ToString();
+				worksheet.Cell($"B{row}").Value = groupedClaim.HourlyRate;
+				worksheet.Cell($"C{row}").Value = groupedClaim.TotalHoursWorked;
+				worksheet.Cell($"D{row}").Value = groupedClaim.TotalAmount;
+				worksheet.Cell($"D{row}").Style.NumberFormat.Format = "R #,##0.00";
+				row++;
+			}
+
+			// Add total amount due
+			worksheet.Cell($"C{row}").Value = "Total Due:";
+			worksheet.Cell($"D{row}").Value = groupedClaims.Sum(g => g.TotalAmount);
+			worksheet.Cell($"D{row}").Style.NumberFormat.Format = "R #,##0.00";
+
+			// Format table
+			var tableRange = worksheet.Range($"A6:D{row}");
 			tableRange.Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
 			tableRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thin);
 
