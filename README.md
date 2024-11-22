@@ -304,16 +304,6 @@ The Contract Monthly Claim System (CMCS) is a .NET web-based application designe
 - **Submit Claim**: Lecturers can submit their monthly claims using the submission form in their Dashboard page. Validation ensures all required fields are correctly filled.
 - **Approve Claim**: Coordinators and managers can review and approve claims submitted by lecturers in their Dashboard page.
 
-## Project Structure
-
-- `src-tests/` - The root directory of the project.
-  - `ContractMonthlyClaimSystem.sln`
-  - `ContractMonthlyClaimSystem`
-    - `Controllers/` - Contains the controllers for handling requests.
-    - `Models/` - Defines the data models used by the application.
-    - `Views/` - Contains Razor Pages for the user interface.
-    - `wwwroot/` - Static files such as CSS and JavaScript.
-
 ## Contributing
 
 No contributions may be made by other as this is a solo assessment.
