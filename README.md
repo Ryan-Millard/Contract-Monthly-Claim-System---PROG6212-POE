@@ -314,4 +314,4 @@ This project is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Contact
 
-For any questions or issues, please contact Ryan Millard at [millardyryandevon@gmail.com](mailto:millardyryandevon@gmail.com).
+For any questions or issues, please contact Ryan Millard at [millardyryandevon@gmail.com](mailto:millardryandevon@gmail.com).
